@@ -1,0 +1,29 @@
+//-------------------------------------------------------------------------------
+// Copyright (c) 2025 John D. Haughton
+// SPDX-License-Identifier: MIT
+//-------------------------------------------------------------------------------
+   
+#pragma once
+
+#include "Delay.h"
+#include "Gain.h"
+
+class FBComb
+{
+public:
+   FBComb() = default;
+
+   Sample operator()(Sample x_)
+   {
+      Sample y = x_ + alpha(delay());
+
+      delay = y;
+
+      return y;
+   }
+
+   Gain alpha{};
+
+private:
+   Delay<1> delay;
+};
