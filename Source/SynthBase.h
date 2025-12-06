@@ -35,14 +35,9 @@ protected:
 private:
    int16_t sample()
    {
-      int32_t sample{0};
+      Sample sample = VOICE::sample(voice, TRAITS::NUM_VOICES);
 
-      for(unsigned i = 0; i < TRAITS::NUM_VOICES; ++i)
-      {
-         sample += voice[i].sample();
-      }
-
-      return int16_t(sample / TRAITS::DIVISOR);
+      return int16_t(sample * 0x7FFF);
    }
 
    void getSamples(uint32_t* buffer, unsigned n) override

@@ -26,12 +26,11 @@ public:
       phase = 0;
    }
 
-   //! Set frequency (dHz)
-   void setFreq_dHz(unsigned freq_dhz_)
+   void setFreq(float freq_hz_)
    {
-      uint64_t ratio_x_10 = uint64_t(freq_dhz_) << 32;
+      float ratio = freq_hz_ / SAMPLE_RATE;
 
-      delta = ratio_x_10 / (10 * Sample::RATE);
+      delta = sample2phase(ratio);
    }
 
    //! Set frequency for MIDI note value
@@ -49,8 +48,6 @@ public:
    }
 
 protected:
-   using Phase = uint32_t;
-
    Phase phase{0}; //!< Phase     (x2pi) Q0.32
    Phase delta{0}; //!< Phase inc (x2pi) Q0.32
 

@@ -16,7 +16,7 @@
 #include "Juno106/Synth.h"
 
 
-static const unsigned DAC_FREQ         = Sample::RATE;
+static const unsigned DAC_FREQ         = SAMPLE_RATE;
 static const unsigned TICK_RATE        = 400;                   //!< 400 Hz
 static const unsigned SAMPLES_PER_TICK = DAC_FREQ / TICK_RATE;  //!< DAC buffer size (16 bit samples)
 static const bool     MIDI_DEBUG       = false;

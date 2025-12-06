@@ -19,8 +19,8 @@ def amp_fn(x):
    return math.pow(10, (DB_RANGE / 20) * (x - 1)) if x > 0 else 0
 
 table.gen('amp15',
-          func      = lambda i,x : int(amp_fn(x) * 0xFFFF + 0.5),
-          typename  = 'uint16_t',
+          func      = lambda i,x : amp_fn(x),
+          typename  = 'float',
           log2_size = 15,
-          fmt       = table.hex_fmt(16),
+          fmt       = 'f',
           is_const  = False)

@@ -18,7 +18,7 @@ public:
       noise_state ^= noise_state >> 17;
       noise_state ^= noise_state << 5;
 
-      return gain(Sample::rescale(noise_state));
+      return gain(float(int32_t(noise_state)) / 0x7FFFFFFF);
    }
 
    Gain gain{};

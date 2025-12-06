@@ -10,10 +10,10 @@ class LfoEnv
 public:
    LfoEnv() = default;
 
-   //! Set LFO delay (mS)
-   void setDelay_mS(unsigned delay_ms_)
+   //! Set LFO delay (s)
+   void setDelay(float delay_s_)
    {
-      delay_samples = (delay_ms_ * Sample::RATE / 1000) + 1;
+      delay_samples = (delay_s_ * SAMPLE_RATE) + 1;
 
       if ((phase == DELAY) && (samples > delay_samples))
       {
@@ -21,11 +21,11 @@ public:
       }
    }
 
-   //! Set LFO attack time(mS)
-   void setAttack_mS(unsigned attack_ms_)
+   //! Set LFO attack time (s)
+   void setAttack(float attack_s_)
    {
-      attack_samples = (attack_ms_ * Sample::RATE / 1000) + 1;
-      attack_rate    = MAX / attack_samples;
+      attack_samples = (attack_s_ * SAMPLE_RATE) + 1;
+      attack_rate    = 1.0 / attack_samples;
    }
 
    //! Gate on
@@ -53,24 +53,22 @@ public:
          else
          {
             phase = SUSTAIN;
-            level = MAX;
+            level = 1.0;
             rate  = 0;
          }
       }
 
-      return level >> 8;
+      return level;
    }
 
 private:
-   static constexpr Sample MAX = Sample::MAX << 8;
+   enum EnvPhase { DELAY, ATTACK, SUSTAIN };
 
-   enum Phase { DELAY, ATTACK, SUSTAIN };
-
-   Phase    phase{SUSTAIN};
-   Sample   level{0};
-   Sample   rate{0};
+   EnvPhase phase{SUSTAIN};
+   Sample   level{0.0};
+   Sample   rate{0.0};
    unsigned samples{0};
    unsigned delay_samples{0};
    unsigned attack_samples{};
-   Sample   attack_rate{0};
+   Sample   attack_rate{0.0};
 };

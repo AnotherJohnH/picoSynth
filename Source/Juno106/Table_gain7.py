@@ -6,21 +6,21 @@
 # pylint: disable=bad-indentation
 
 # Attenuation table...
-#   0  => is infinity   0x0000
-#   1  => is -60 dB
-# 0x7F => is 0 dB       0xFFFF
+# 0x00 => is -20 dB
+# 0x40 => is   0 dB  0xFFFF
+# 0x7F => is +20 dB
 
 import math
 import table
 
-DB_RANGE = 60
+DB_RANGE = 20
 
 def amp_fn(x):
-   return math.pow(10, (DB_RANGE / 20) * (x - 1)) if x > 0 else 0
+   return math.pow(10, (DB_RANGE / 20) * (x - 1))
 
-table.gen('amp7',
-          func      = lambda i,x : int(amp_fn(x) * 0xFFFF + 0.5),
-          typename  = 'uint16_t',
+table.gen('gain7',
+          func      = lambda i,x : amp_fn(x * 2),
+          typename  = 'float',
           log2_size = 7,
-          fmt       = table.hex_fmt(16),
+          fmt       = 'f',
           is_const  = True)

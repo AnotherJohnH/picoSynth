@@ -7,59 +7,19 @@
 
 #include <cstdint>
 
-//! 16 bit 2's complement samples
-class Sample
+using Sample = float;
+using Phase  = uint32_t;
+
+//! Convert phase to -1.0..1.0 (pi)
+inline Sample phase2sample(Phase phase_)
 {
-public:
-   constexpr Sample() = default;
+   return Sample(int32_t(phase_)) / 0x80000000;
+}
 
-   constexpr Sample(int32_t value_)
-      : value(value_)
-   {
-   }
+//! Convert sample -1.0..1.0 to 32-bit phase
+inline Phase sample2phase(Sample sample_)
+{
+   return int32_t(sample_ * 0x7FFFFFFF);
+}
 
-   constexpr operator int32_t() const { return value; }
-
-   constexpr int32_t operator<<(unsigned bits_) const { return value << bits_; }
-   constexpr int32_t operator<<(signed bits_) const { return value << bits_; }
-
-   constexpr int32_t operator>>(unsigned bits_) const { return value >> bits_; }
-   constexpr int32_t operator>>(signed bits_) const { return value >> bits_; }
-
-   constexpr int32_t operator*(Sample rhs_) const { return (value * rhs_) >> BITS; }
-
-   int32_t operator=(int32_t value_)
-   {
-      value = value_;
-      return value;
-   }
-
-   int32_t operator+=(int32_t value_)
-   {
-      value += value_;
-      return value;
-   }
-
-   int32_t operator-=(int32_t value_)
-   {
-      value -= value_;
-      return value;
-   }
-
-   template <typename TYPE>
-   static Sample rescale(TYPE value_)
-   {
-      const unsigned WIDTH{sizeof(TYPE) * 8};
-
-      return Sample(value_) >> (WIDTH - BITS);
-   }
-
-   static const unsigned RATE{48000};   //!< 48 kHz
-   static const unsigned BITS{16};      //!< sample total bit width
-   static const int32_t  MAX{+0x7FFF};  //!< ~ +1.0
-   static const int32_t  MIN{-0x7FFF};  //!< ~ -1.0
-
-private:
-   int32_t value;
-};
-
+static const unsigned SAMPLE_RATE{48000};   //!< 48 kHz

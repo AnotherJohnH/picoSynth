@@ -13,17 +13,18 @@ class PulseOsc : public OscBase
 public:
    PulseOsc() = default;
 
-   void setWidth(uint8_t value7_)
+   //! Set pulse width 0.0 => square
+   void setWidth(Sample width_)
    {
-      limit = (128 + value7_) << 24;
+      limit = PHASE_HALF + sample2phase(width_);
    }
 
+   //! Get next sample
    Sample operator()(Sample mod_ = 0)
    {
-      Sample sample = phase >= limit ? Sample::MIN
-                                     : Sample::MAX;
+      Sample sample = phase >= limit ? -1.0 : +1.0;
 
-      phase += delta + mod_;
+      phase += delta + sample2phase(mod_);
 
       return gain(sample);
    }
@@ -31,5 +32,6 @@ public:
    Gain gain{};
 
 private:
-   Phase limit = PHASE_HALF;
+   Phase limit{PHASE_HALF};
 };
+

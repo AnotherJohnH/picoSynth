@@ -15,9 +15,9 @@ public:
 
    Sample operator()(Sample mod_ = 0)
    {
-      Sample sample = Sample::rescale(phase);
+      Sample sample = phase2sample(phase);
 
-      phase += delta + mod_;
+      phase += delta + sample2phase(mod_);
 
       return gain(sample);
    }

@@ -32,7 +32,7 @@ public:
 
    void setAttack_mS(unsigned time_ms_)
    {
-      unsigned samples = (time_ms_ * Sample::RATE / 1000) + 1;
+      unsigned samples = (time_ms_ * SAMPLE_RATE / 1000) + 1;
       phase_rate[ATTACK] = MAX / samples;
 
       if (phase == ATTACK)
@@ -43,8 +43,8 @@ public:
 
    void setDecay_mS(unsigned time_ms_)
    {
-      unsigned samples = (time_ms_ * Sample::RATE / 1000) + 1;
-      Sample rate = MAX / samples;
+      unsigned samples = (time_ms_ * SAMPLE_RATE / 1000) + 1;
+      int32_t rate = MAX / samples;
       phase_rate[DECAY] = -rate;
 
       if (phase == DECAY)
@@ -69,8 +69,8 @@ public:
 
    void setRelease_mS(unsigned time_ms_)
    {
-      unsigned samples = (time_ms_ * Sample::RATE / 1000) + 1;
-      Sample rate = MAX / samples;
+      unsigned samples = (time_ms_ * SAMPLE_RATE / 1000) + 1;
+      int32_t rate = MAX / samples;
       phase_rate[RELEASE] = -rate;
 
       if (phase == RELEASE)
@@ -104,21 +104,21 @@ public:
       }
 
       level = target;
-      setPhase(Phase(phase + 1));
+      setPhase(EnvPhase(phase + 1));
       return table_amp15[level >> 8];
    }
 
 private:
-   static constexpr Sample MAX = Sample::MAX << 8;
+   static constexpr int32_t MAX = 0x7FFFFF;
 
-   enum Phase { OFF, ATTACK, DECAY, SUSTAIN, RELEASE, NUM_PHASES };
+   enum EnvPhase { OFF, ATTACK, DECAY, SUSTAIN, RELEASE, NUM_PHASES };
 
-   static Sample scaleLevel(uint8_t level7_)
+   static int32_t scaleLevel(uint8_t level7_)
    {
       return (level7_ << 16) | (level7_ << 9) | (level7_ << 2) | (level7_ >> 5);
    }
 
-   void setPhase(Phase phase_)
+   void setPhase(EnvPhase phase_)
    {
       if (phase_ == NUM_PHASES)
       {
@@ -130,10 +130,10 @@ private:
       target = phase_level[phase];
    }
 
-   Phase  phase{OFF};
-   Sample level{0};
-   Sample rate{0};
-   Sample target{0};
-   Sample phase_rate[NUM_PHASES]  = {};
-   Sample phase_level[NUM_PHASES] = {};
+   EnvPhase phase{OFF};
+   int32_t  level{0};
+   int32_t  rate{0};
+   int32_t  target{0};
+   int32_t  phase_rate[NUM_PHASES]  = {};
+   int32_t  phase_level[NUM_PHASES] = {};
 };

@@ -20,9 +20,9 @@ public:
       Phase p = phase_shift >= PHASE_HALF ? -phase * 2
                                           : +phase * 2;
 
-      Sample sample = Sample::rescale(p);
+      Sample sample = phase2sample(p);
 
-      phase += delta + mod_;
+      phase += delta + sample2phase(mod_);
 
       return gain(sample);
    }
