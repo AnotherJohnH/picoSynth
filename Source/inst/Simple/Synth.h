@@ -10,7 +10,7 @@
 
 namespace Simple {
 
-class Synth : public ::SynthVoice<Voice, /* NUM_VOICES */ 16>
+class Synth : public ::SynthVoice<Voice, /* NUM_VOICES */ 8>
 {
 public:
    Synth() = default;

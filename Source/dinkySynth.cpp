@@ -15,6 +15,7 @@
 
 #include "Juno106/Synth.h"
 #include "Simple/Synth.h"
+#include "VL1/Synth.h"
 
 
 static const unsigned DAC_FREQ         = SAMPLE_RATE;
@@ -22,11 +23,12 @@ static const unsigned TICK_RATE        = 400;                   //!< 400 Hz
 static const unsigned SAMPLES_PER_TICK = DAC_FREQ / TICK_RATE;  //!< DAC buffer size (16 bit samples)
 static const bool     MIDI_DEBUG       = false;
 static const bool     PROFILE          = false;
-static const unsigned NUM_SYNTHS       = 2;
+static const unsigned NUM_SYNTHS       = 3;
 
 
 static Juno106::Synth juno106{};
 static Simple::Synth  simple{};
+static VL1::Synth     vl1{};
 static Synth*         synth{};
 static unsigned       synth_index{0};
 
@@ -115,6 +117,7 @@ void initSynth()
    {
    case 0: synth = &juno106; break;
    case 1: synth = &simple;  break;
+   case 2: synth = &vl1;     break;
    }
 
    usb.attachInstrument(1, *synth);

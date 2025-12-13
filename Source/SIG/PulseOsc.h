@@ -6,32 +6,45 @@
 #pragma once
 
 #include "OscBase.h"
-#include "Gain.h"
 
 class PulseOsc : public OscBase
 {
 public:
    PulseOsc() = default;
 
-   //! Set pulse width 0.0 => square
-   void setWidth(Sample width_)
+   template <typename TYPE>
+   void setPattern(TYPE pattern_)
    {
-      limit = PHASE_HALF + sample2phase(width_);
+      unsigned num_bits        = sizeof(TYPE) * 8;
+      unsigned samples_per_bit = PATTERN_LENGTH / num_bits;
+
+      unsigned index = 0;
+
+      for(unsigned bit = 0; bit < num_bits; ++bit)
+      {
+         TYPE mask  = TYPE(1) << bit;
+         bool value = (pattern_ & mask) != 0;
+
+         for(unsigned j = 0; j < samples_per_bit; ++j)
+         {
+            pattern[index++] = value ? +1.0 : -1.0;
+         }
+      }
    }
 
-   //! Get next sample
    Sample operator()(Sample mod_ = 0)
    {
-      Sample sample = phase >= limit ? -1.0 : +1.0;
+      unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
 
       phase += delta + sample2phase(mod_);
 
-      return gain(sample);
+      return pattern[index];
    }
 
-   Gain gain{};
-
 private:
-   Phase limit{PHASE_HALF};
+   static const unsigned LOG2_PATTERN_LENGTH = 5;
+   static const uint64_t PATTERN_LENGTH      = 1 << LOG2_PATTERN_LENGTH;
+
+   Sample pattern[PATTERN_LENGTH];
 };
 

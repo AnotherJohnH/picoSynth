@@ -9,7 +9,7 @@
 
 #include "SIG/TriOsc.h"
 #include "SIG/RampOsc.h"
-#include "SIG/PulseOsc.h"
+#include "SIG/PwmOsc.h"
 #include "SIG/SineOsc.h"
 #include "SIG/Noise.h"
 #include "SIG/LfoEnv.h"
@@ -153,8 +153,8 @@ private:
    Sample         dco_pwm_lfo_gain{};
    bool           dco_pwm_lfo{};
    RampOsc        dco_saw{};
-   PulseOsc       dco_pwm{};
-   PulseOsc       dco_sub{};
+   PwmOsc         dco_pwm{};
+   PwmOsc         dco_sub{};
    Noise          noise{};
    Adsr           env{};
    Filter::BiQuad vcf{Filter::LOPASS};

@@ -3,10 +3,6 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_subdirectory(SIG)
-add_subdirectory(inst)
+add_library(VL1 STATIC Program.cpp)
 
-add_picoX7_executable(dinkySynth
-                         dinkySynth.cpp
-                      LIBRARIES
-                         Juno106 Simple VL1 SIG)
+target_include_directories(VL1 PUBLIC ..)
