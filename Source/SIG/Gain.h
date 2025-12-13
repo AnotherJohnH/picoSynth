@@ -10,7 +10,7 @@
 class Gain
 {
 public:
-   Gain() = default;
+   Gain(Sample value_ = 1.0) : value(value_) {}
 
    operator Sample() const { return value; }
 

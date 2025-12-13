@@ -77,12 +77,6 @@ public:
       vca_gate = patch_->vca_gate;
    }
 
-   void mute()
-   {
-      env.mute();
-      gate = 0;
-   }
-
    void noteOn(uint8_t note_, uint8_t velocity_)
    {
       note = note_;

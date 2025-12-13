@@ -5,17 +5,21 @@
 
 #pragma once
 
-#include "../SynthBase.h"
+#include "../SynthVoice.h"
 #include "Simple/Voice.h"
 
 namespace Simple {
 
-class Synth : public ::SynthBase<Voice, /* NUM_VOICES */ 16>
+class Synth : public ::SynthVoice<Voice, /* NUM_VOICES */ 16>
 {
 public:
    Synth() = default;
 
-   const char* getName() const override { return "     simple     "; }
+private:
+   void synthInit() override
+   {
+      setText(0, "     simple     ");
+   }
 };
 
 } // namespace Simple

@@ -16,37 +16,59 @@ public:
    {
    }
 
-   virtual void init() {}
+   void init()
+   {
+      setText(0, "");
+      setText(1, "");
 
-   virtual const char* getName() const = 0;
+      synthInit();
 
+      for(unsigned i = 0; i < num_voices; ++i)
+      {
+         voiceOff(i, 0);
+      }
+   }
+
+   //! Get stereo samples from synth
    virtual void getSamples(uint32_t* buffer, unsigned n) = 0;
 
-   const char* getInfo() const
+   //! Get display text for the given line if it has been updated
+   const char* getText(unsigned line_)
    {
-      if (not info_update)
+      if (not text_update[line_])
          return nullptr;
 
-      return info;
+      text_update[line_] = false;
+
+      return &text[line_][0];
    }
 
 protected:
-   void setInfo(const char* text_)
+   virtual void synthInit()
    {
+   }
+
+   //! Update text for the given line
+   void setText(unsigned line_, const char* text_)
+   {
+      text_update[line_] = false;
+
       unsigned i = 0;
 
-      for(; (i < 16) && (text_[i] != '\0'); ++i)
-         info[i] = text_[i];
+      for(; (i < MAX_TEXT_LEN) && (text_[i] != '\0'); ++i)
+         text[line_][i] = text_[i];
 
-      for(; i < 16; ++i)
-         info[i] = ' ';
+      for(; i < MAX_TEXT_LEN; ++i)
+         text[line_][i] = ' ';
 
-      info[i] = '\0';
-
-      info_update = true;
+      text[line_][i]     = '\0';
+      text_update[line_] = true;
    }
 
 private:
-   char info[16 + 1];
-   bool info_update{false};
+   static const unsigned MAX_TEXT_LEN   = 16;
+   static const unsigned MAX_TEXT_LINES = 2;
+
+   char text[MAX_TEXT_LINES][MAX_TEXT_LEN + 1];
+   bool text_update[MAX_TEXT_LINES] = {};
 };

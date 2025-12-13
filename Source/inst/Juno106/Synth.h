@@ -7,29 +7,28 @@
 
 #include <cstring>
 
-#include "../SynthSysExBase.h"
+#include "../SynthVoiceSysEx.h"
 #include "Juno106/Program.h"
 #include "Juno106/Voice.h"
 #include "Juno106/SysEx.h"
 
 namespace Juno106 {
 
-class Synth : public ::SynthSysExBase<Voice, /* NUM_VOICES */ 6, /* MAX_SYSEX_SIZE */ 3 + 18>
+class Synth : public ::SynthVoiceSysEx<Voice, /* NUM_VOICES */ 6, /* MAX_SYSEX_SIZE */ 3 + 18>
 {
 public:
    Synth()
-      : SynthSysExBase(MIDI_MANUF_ID)
+      : SynthVoiceSysEx(MIDI_MANUF_ID)
    {
-   }
-
-   const char* getName() const override { return "    JUNO-106    "; }
-
-   void init() override
-   {
-      setPatch(program[0].raw, "INIT");
    }
 
 private:
+   void synthInit() override
+   {
+      setText(0, "    JUNO-106    ");
+      setPatch(program[0].raw, "INIT");
+   }
+
    static const uint8_t MIDI_MANUF_ID = 0x41; //!< Roland
 
    void setPatch(const uint8_t* raw_, const char* name_)
@@ -38,12 +37,12 @@ private:
 
       patch.print(name_);
       programVoices(&patch);
-      setInfo(name_);
+      setText(1, name_);
    }
 
    uint8_t edit(const char* text_, uint8_t value_)
    {
-      setInfo(text_);
+      setText(1, text_);
       return value_;
    }
 
@@ -69,7 +68,7 @@ private:
    {
       char text[17];
       snprintf(text, sizeof(text), "%s %s", name_, value_ ? text_true_ : text_false_);
-      setInfo(text);
+      setText(1, text);
       return value_;
    }
 
@@ -175,7 +174,7 @@ private:
             {
                memcpy(program[num + 1].raw, &sysex_buffer[3], sizeof(SysEx));
 
-               setInfo("SYSEX preset");
+               setText(1, "SYSEX preset");
             }
          }
          break;
@@ -210,7 +209,7 @@ private:
 
                programVoices(&patch);
 
-               setInfo("SYSEX edit");
+               setText(1, "SYSEX edit");
             }
          }
          break;
