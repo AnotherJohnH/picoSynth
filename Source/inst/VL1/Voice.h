@@ -5,13 +5,7 @@
 
 #pragma once
 
-#include "SIG/PosPwmOsc.h"
-#include "SIG/PwmOsc.h"
-#include "SIG/PulseOsc.h"
-#include "SIG/TriOsc.h"
-#include "SIG/Noise.h"
-#include "SIG/Adsr.h"
-#include "SIG/Gain.h"
+#include "SIG/SIG.h"
 
 #include "VL1/Program.h"
 #include "VL1/Control.h"
@@ -21,10 +15,11 @@ namespace VL1 {
 class Voice
 {
 public:
-   Voice()
+   Voice() = default;
+
+   void init()
    {
-      lpf.setFreq(3000);
-      lpf.setQ(0.1);
+      lpf.setFreq(2000);
 
       perc_env.setAttack_mS(0);
       perc_env.setSustain(0);
@@ -87,8 +82,8 @@ public:
          break;
       }
 
-      melody_env.setAttack_mS(5 + patch_->attack_time * 100);
-      melody_env.setDecay_mS(patch_->decay_time * 400);
+      melody_env.setAttack_mS(5 + patch_->attack_time * 50);
+      melody_env.setDecay_mS(patch_->decay_time * 800);
       melody_env.setSustain(patch_->sustain_level * 127 / 9);
       melody_env.setSustain_mS(patch_->sustain_time * 400);
       melody_env.setRelease_mS(patch_->release_time * 400);
@@ -104,14 +99,11 @@ public:
       }
    }
 
-   void control(const Control* control_)
+   void program(const Control* control_)
    {
       melody_transpose = (signed(control_->octave) - 1) * 12 + control_->tune / 50.0f;
 
-      if (control_->volume == 0)
-         gain = 0.0;
-      else
-         gain.setAtten_dB((99 - control_->volume) * 30.0f / 99);
+      volume.setAtten_dB(-control_->gain);
 
       float pan = (50 + control_->balance) / 100.0f;
 
@@ -191,7 +183,7 @@ public:
          break;
       }
 
-      return gain(value);
+      return volume(value);
    }
 
    static Sample effect(Sample sample_)
@@ -202,20 +194,20 @@ public:
 private:
    enum Mode { PERC_OSC, PERC_NOISE, MELODY };
 
-   signed         voice_transpose{0};
-   Mode           mode{};
-   PosPwmOsc      octave_osc{};
-   TriOsc         vibrato_osc{};
-   PulseOsc       melody_osc{};
-   Adsr           melody_env{};
-   float          melody_transpose{};
-   bool           tremolo_on{false};
-   TriOsc         tremolo_osc{};
-   Filter::BiQuad lpf{Filter::LOPASS};
-   Adsr           perc_env{};
-   PwmOsc         perc_osc{};
-   Noise          perc_noise{};
-   Gain           gain{};
+   signed             voice_transpose{0};
+   Mode               mode{};
+   Osc::PwmPos        octave_osc{};
+   Osc::Triangle      vibrato_osc{};
+   Osc::Pulse         melody_osc{};
+   Adsr               melody_env{};
+   float              melody_transpose{};
+   bool               tremolo_on{false};
+   Osc::Triangle      tremolo_osc{};
+   Filter::FirstOrder lpf{Filter::LOPASS};
+   Adsr               perc_env{};
+   Osc::Pwm           perc_osc{};
+   Osc::Noise         perc_noise{};
+   Gain               volume{};
 };
 
 } // namespace VL1

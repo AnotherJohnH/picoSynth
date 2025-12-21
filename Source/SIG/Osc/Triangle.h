@@ -5,13 +5,15 @@
    
 #pragma once
 
-#include "OscBase.h"
-#include "Gain.h"
+#include "SIG/Osc/Base.h"
+#include "SIG/Gain.h"
 
-class TriOsc : public OscBase
+namespace Osc {
+
+class Triangle : public Base
 {
 public:
-   TriOsc() = default;
+   Triangle() = default;
 
    Sample operator()()
    {
@@ -43,3 +45,5 @@ public:
 
    Gain gain{};
 };
+
+} // namespace Osc

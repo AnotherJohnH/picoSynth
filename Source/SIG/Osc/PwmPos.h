@@ -5,17 +5,25 @@
    
 #pragma once
 
-#include "OscBase.h"
-#include "Gain.h"
+#include "SIG/Osc/Base.h"
+#include "SIG/Gain.h"
 
-class RampOsc : public OscBase
+namespace Osc {
+
+class PwmPos : public Base
 {
 public:
-   RampOsc() = default;
+   PwmPos() = default;
+
+   //! Set pulse width 0.0 => square
+   void setWidth(Sample width_)
+   {
+      limit = PHASE_HALF + sample2phase(width_);
+   }
 
    Sample operator()()
    {
-      Sample sample = phase2sample(phase);
+      Sample sample = phase >= limit ? 0.0f : +1.0f;
 
       phase += delta;
 
@@ -24,12 +32,17 @@ public:
 
    Sample operator()(Sample mod_)
    {
-      Sample sample = phase2sample(phase);
+      Sample sample = phase >= limit ? 0.0f : +1.0f;
 
-      phase += modDelta(mod_); 
+      phase += modDelta(mod_);
 
       return gain(sample);
    }
 
    Gain gain{};
+
+private:
+   Phase limit{PHASE_HALF};
 };
+
+} // namespace Osc

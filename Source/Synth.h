@@ -86,7 +86,11 @@ protected:
       number_update = true;
    }
 
-   signed editInt(const char* name_, uint8_t midi_value_, signed min_, signed max_)
+   signed editInt(const char* name_,
+                  uint8_t     midi_value_,
+                  signed      min_,
+                  signed      max_,
+                  const char* unit_ = "")
    {
       signed value = min_ + midi_value_ * (max_ - min_) / 127;
 
@@ -94,11 +98,11 @@ protected:
       if (min_ < 0)
       {
          char sign = value < 0 ? '-' : value > 0 ? '+' : ' ';
-         snprintf(text, sizeof(text), "%s %c%d", name_, sign, abs(value));
+         snprintf(text, sizeof(text), "%s %c%d %s", name_, sign, abs(value), unit_);
       }
       else
       {
-         snprintf(text, sizeof(text), "%s %d", name_, value);
+         snprintf(text, sizeof(text), "%s %d %s", name_, value, unit_);
       }
       setText(1, text);
 

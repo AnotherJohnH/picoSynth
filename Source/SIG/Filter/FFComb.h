@@ -5,21 +5,17 @@
    
 #pragma once
 
-#include "Delay.h"
-#include "Gain.h"
+#include "SIG/Delay.h"
+#include "SIG/Gain.h"
 
-class FBComb
+class FFComb
 {
 public:
-   FBComb() = default;
+   FFComb() = default;
 
    Sample operator()(Sample x_)
    {
-      Sample y = x_ + alpha(delay());
-
-      delay = y;
-
-      return y;
+      return x_ + alpha(delay(x_));
    }
 
    Gain alpha{};

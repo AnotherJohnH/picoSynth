@@ -9,10 +9,12 @@
 
 #include "Table_delta14_7.h"
 
-class OscBase
+namespace Osc {
+
+class Base
 {
 public:
-   OscBase() = default;
+   Base() = default;
 
    void mute()
    {
@@ -82,3 +84,5 @@ private:
    int32_t  exp_freq_detune{0}; //!< Detune (fixed-point-7)
    uint8_t  midi_note{0};       //!< MIDI note
 };
+
+} // namespace Osc

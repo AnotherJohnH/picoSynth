@@ -6,7 +6,9 @@
 #pragma once
 
 #include "../SynthVoice.h"
-#include "Simple/Voice.h"
+
+#include "Voice.h"
+#include "Control.h"
 
 namespace Simple {
 
@@ -20,6 +22,22 @@ private:
    {
       setText(0, "     simple     ");
    }
+
+   void voiceControl(unsigned index_, uint8_t control_, uint8_t value_) override
+   {
+      if (index_ != 0)
+         return;
+
+      switch(control_)
+      {
+      case 19: case 2:
+         control.value = editInt("VALUE", value_, 0, 127);
+         programVoices(&control);
+         break;
+      }
+   }
+
+   Control control{};
 };
 
 } // namespace Simple

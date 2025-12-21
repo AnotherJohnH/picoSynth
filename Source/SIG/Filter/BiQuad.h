@@ -7,19 +7,10 @@
 
 #include <cmath>
 
-#include "Sample.h"
+#include "SIG/Sample.h"
+#include "SIG/Filter/Type.h"
 
 namespace Filter {
-
-enum Type
-{
-   OFF,
-   BYPASS,
-   LOPASS,
-   HIPASS,
-   LOSHELF,
-   HISHELF
-};
 
 class BiQuad
 {

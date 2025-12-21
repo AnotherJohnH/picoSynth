@@ -5,7 +5,9 @@
    
 #pragma once
 
-#include "Sample.h"
+#include "SIG/Gain.h"
+
+namespace Osc {
 
 class Noise
 {
@@ -26,3 +28,5 @@ public:
 private:
    uint32_t noise_state{1};
 };
+
+} // namespace Osc

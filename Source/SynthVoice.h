@@ -17,21 +17,20 @@ public:
    }
 
 protected:
-   template <typename PATCH>
-   void programVoices(const PATCH* patch_)
+   void initVoices()
    {
       for(unsigned i = 0; i < NUM_VOICES; ++i)
       {
-         voice[i].program(patch_);
+         voice[i].init();
       }
    }
 
-   template <typename CONTROL>
-   void controlVoices(const CONTROL* control_)
+   template <typename CONFIG>
+   void programVoices(const CONFIG* config_)
    {
       for(unsigned i = 0; i < NUM_VOICES; ++i)
       {
-         voice[i].control(control_);
+         voice[i].program(config_);
       }
    }
 

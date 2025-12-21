@@ -5,12 +5,14 @@
    
 #pragma once
 
-#include "OscBase.h"
+#include "SIG/Osc/Base.h"
 
-class PulseOsc : public OscBase
+namespace Osc {
+
+class Pulse : public Base
 {
 public:
-   PulseOsc() = default;
+   Pulse() = default;
 
    template <typename TYPE>
    void setPattern(TYPE pattern_)
@@ -59,3 +61,4 @@ private:
    Sample pattern[PATTERN_LENGTH];
 };
 
+} // namespace Osc

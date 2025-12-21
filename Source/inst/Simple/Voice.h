@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "SIG/SineOsc.h"
-#include "SIG/Gain.h"
+#include "SIG/SIG.h"
+
+#include "Control.h"
 
 namespace Simple {
 
@@ -14,6 +15,11 @@ class Voice
 {
 public:
    Voice() = default;
+
+   void program(const Control* control_)
+   {
+      osc.gain = control_->value / 127.0f;
+   }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
    {
@@ -39,8 +45,8 @@ public:
    }
 
 private:
-   SineOsc osc{};
-   Gain    gain{0.0};
+   Osc::Sine osc{};
+   Gain      gain{0.0};
 };
 
 } // namespace Simple

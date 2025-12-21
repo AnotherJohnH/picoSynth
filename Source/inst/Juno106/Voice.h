@@ -7,15 +7,7 @@
 
 #include "Juno106/SysEx.h"
 
-#include "SIG/TriOsc.h"
-#include "SIG/RampOsc.h"
-#include "SIG/PwmOsc.h"
-#include "SIG/SineOsc.h"
-#include "SIG/Noise.h"
-#include "SIG/LfoEnv.h"
-#include "SIG/Adsr.h"
-#include "SIG/Gain.h"
-#include "SIG/BiQuadFilter.h"
+#include "SIG/SIG.h"
 
 #include "Table_amp7.h"
 #include "Table_gain7.h"
@@ -147,15 +139,15 @@ private:
 
    signed         transpose{0};
    uint8_t        note{};
-   TriOsc         lfo{};
+   Osc::Triangle  lfo{};
    LfoEnv         lfo_env{};
    Sample         dco_lfo{};
    Sample         dco_pwm_lfo_gain{};
    bool           dco_pwm_lfo{};
-   RampOsc        dco_saw{};
-   PwmOsc         dco_pwm{};
-   PwmOsc         dco_sub{};
-   Noise          noise{};
+   Osc::Ramp      dco_saw{};
+   Osc::Pwm       dco_pwm{};
+   Osc::Pwm       dco_sub{};
+   Osc::Noise     noise{};
    Adsr           env{};
    Filter::BiQuad vcf{Filter::LOPASS};
    Gain           vca{};

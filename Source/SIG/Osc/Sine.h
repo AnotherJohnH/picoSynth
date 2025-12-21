@@ -7,13 +7,15 @@
 
 #include <cmath>
 
-#include "Gain.h"
-#include "OscBase.h"
+#include "SIG/Osc/Base.h"
+#include "SIG/Gain.h"
 
-class SineOsc : public OscBase
+namespace Osc {
+
+class Sine : public Base
 {
 public:
-   SineOsc() = default;
+   Sine() = default;
 
    Sample operator()()
    {
@@ -35,3 +37,5 @@ public:
 
    Gain gain{};
 };
+
+} // namespace Osc

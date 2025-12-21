@@ -48,10 +48,10 @@ extern "C" void IRQ_IO_BANK0() { buttons.irq(); }
 
 // --- USB MIDI and FILE -------------------------------------------------------
 
-static hw::FilePortal file_portal{"picoSynth-1",
+static hw::FilePortal file_portal{"picoSynth",
                                   "https://github.com/AnotherJohnH/picoSynth"};
 
-static hw::UsbFileMidi usb{0xD157, "picoSynth-1", file_portal};
+static hw::UsbFileMidi usb{0xD157, "picoSynth", file_portal};
 
 extern "C" void IRQ_USBCTRL() { usb.irq(); }
 
@@ -138,10 +138,10 @@ int main()
    printf("\033[2J\033[H");
 
    printf("\n");
-   puts(file_portal.addREADME("picoSynth-1"));
+   puts(file_portal.addREADME("picoSynth"));
    printf("\n");
 
-   lcd.print("   picoSynth-1  ");
+   lcd.print("   pico-Synth   ");
 
    usleep(1000000);
 

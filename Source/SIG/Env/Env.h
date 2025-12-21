@@ -5,21 +5,5 @@
    
 #pragma once
 
-#include "Delay.h"
-#include "Gain.h"
-
-class FFComb
-{
-public:
-   FFComb() = default;
-
-   Sample operator()(Sample x_)
-   {
-      return x_ + alpha(delay(x_));
-   }
-
-   Gain alpha{};
-
-private:
-   Delay<1> delay;
-};
+#include "Adsr.h"
+#include "LfoEnv.h"
