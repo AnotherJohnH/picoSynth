@@ -19,7 +19,7 @@ public:
 
    Sample operator()()
    {
-      float theta = phase2sample(phase) * M_PI;
+      float theta = uphase2sample(phase) * M_PI;
 
       phase += delta;
 
@@ -28,7 +28,7 @@ public:
 
    Sample operator()(Sample mod_)
    {
-      float theta = phase2sample(phase) * M_PI;
+      float theta = uphase2sample(phase) * M_PI;
 
       phase += modDelta(mod_);
 

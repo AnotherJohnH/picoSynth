@@ -17,12 +17,12 @@ public:
 
    Sample operator()()
    {
-      Phase phase_shift = phase + PHASE_QUARTER;
+      UPhase phase_shift = phase + UPHASE_QUARTER;
 
-      Phase p = phase_shift >= PHASE_HALF ? -phase * 2
+      UPhase p = phase_shift >= UPHASE_HALF ? -phase * 2
                                           : +phase * 2;
 
-      Sample sample = phase2sample(p);
+      Sample sample = uphase2sample(p);
 
       phase += delta;
 
@@ -31,12 +31,12 @@ public:
 
    Sample operator()(Sample mod_)
    {
-      Phase phase_shift = phase + PHASE_QUARTER;
+      UPhase phase_shift = phase + UPHASE_QUARTER;
 
-      Phase p = phase_shift >= PHASE_HALF ? -phase * 2
+      UPhase p = phase_shift >= UPHASE_HALF ? -phase * 2
                                           : +phase * 2;
 
-      Sample sample = phase2sample(p);
+      Sample sample = uphase2sample(p);
 
       phase += modDelta(mod_);
 

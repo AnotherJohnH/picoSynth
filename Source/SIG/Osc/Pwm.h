@@ -10,25 +10,25 @@
 
 namespace Osc {
 
-class Pwm : public Base
+template <Sample HIGH, Sample LOW>
+class PwmShift : public Base
 {
 public:
-   Pwm() = default;
+   PwmShift() = default;
 
    //! Set pulse width 0.0 => square
    void setWidth(Sample width_)
    {
-      limit = PHASE_HALF + sample2phase(width_);
-      duty  = 0.5 + width_;
+      limit = UPHASE_HALF + sample2uphase(width_);
    }
 
    Sample operator()()
    {
-      Sample sample = phase < limit ? +1.0f : -1.0f;
+      Sample sample = phase < limit ? HIGH : LOW;
 
-      float t = phase2float(phase);
+      float t = uphase2float(phase);
       sample += polyBLEP(t);
-      t = phase2float(phase - limit);
+      t = uphase2float(phase - limit);
       sample -= polyBLEP(t);
 
       phase += delta;
@@ -40,11 +40,11 @@ public:
    {
       setDelta(modDelta(mod_));
 
-      Sample sample = phase < limit ? +1.0f : -1.0f;
+      Sample sample = phase < limit ? HIGH : LOW;
 
-      float t = phase2float(phase);
+      float t = uphase2float(phase);
       sample += polyBLEP(t);
-      t = phase2float(phase - limit);
+      t = uphase2float(phase - limit);
       sample -= polyBLEP(t);
 
       phase += delta;
@@ -55,8 +55,9 @@ public:
    Gain gain{};
 
 private:
-   Phase limit{PHASE_HALF};
-   float duty{0.5};
+   UPhase limit{UPHASE_HALF};
 };
+
+using Pwm = PwmShift<+1.0f,-1.0f>;
 
 } // namespace Osc

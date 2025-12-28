@@ -17,11 +17,11 @@ public:
 
    Sample operator()()
    {
-      Sample sample = phase < PHASE_HALF ? +1.0f : -1.0f;
+      Sample sample = phase < UPHASE_HALF ? +1.0f : -1.0f;
 
-      float t = phase2float(phase);
+      float t = uphase2float(phase);
       sample += polyBLEP(t);
-      t = phase2float(phase - PHASE_HALF);
+      t = uphase2float(phase - UPHASE_HALF);
       sample -= polyBLEP(t);
 
       phase += delta;
@@ -33,11 +33,11 @@ public:
    {
       setDelta(modDelta(mod_));
 
-      Sample sample = phase < PHASE_HALF ? +1.0f : -1.0f;
+      Sample sample = phase < UPHASE_HALF ? +1.0f : -1.0f;
 
-      float t = phase2float(phase);
+      float t = uphase2float(phase);
       sample += polyBLEP(t);
-      t = phase2float(phase - PHASE_HALF);
+      t = uphase2float(phase - UPHASE_HALF);
       sample -= polyBLEP(t);
 
       phase += delta;

@@ -190,20 +190,20 @@ public:
 private:
    enum Mode { PERC_OSC, PERC_NOISE, MELODY };
 
-   signed             voice_transpose{0};
-   Mode               mode{};
-   Osc::PwmPos        octave_osc{};
-   Osc::Triangle      vibrato{};
-   float              melody_transpose{};
-   Osc::Pulse         melody{};
-   Filter::FirstOrder lpf{Filter::LOPASS};
-   Adsr               env{};
-   bool               tremolo_on{false};
-   Osc::Triangle      tremolo{};
-   Adsr               perc_env{};
-   Osc::Pwm           perc_osc{};
-   Osc::Noise         perc_noise{};
-   Gain               volume{};
+   signed                   voice_transpose{0};
+   Mode                     mode{};
+   Osc::PwmShift<1.0f,0.0f> octave_osc{};
+   Osc::Triangle            vibrato{};
+   float                    melody_transpose{};
+   Osc::Pulse               melody{};
+   Filter::FirstOrder       lpf{Filter::LOPASS};
+   Adsr                     env{};
+   bool                     tremolo_on{false};
+   Osc::Triangle            tremolo{};
+   Adsr                     perc_env{};
+   Osc::Pwm                 perc_osc{};
+   Osc::Noise               perc_noise{};
+   Gain                     volume{};
 };
 
 } // namespace VL1

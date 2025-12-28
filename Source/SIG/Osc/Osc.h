@@ -8,7 +8,6 @@
 #include "Noise.h"
 #include "Pulse.h"
 #include "Pwm.h"
-#include "PwmPos.h"
 #include "Ramp.h"
 #include "Sine.h"
 #include "Square.h"

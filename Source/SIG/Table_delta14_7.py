@@ -33,4 +33,4 @@ table.gen('delta14_7',
           typename  = 'uint32_t',
           log2_size = 14,
           fmt       = table.hex_fmt(32),
-          is_const  = True)
+          is_const  = False)

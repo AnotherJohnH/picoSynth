@@ -10,4 +10,4 @@
 #include "Filter/Filter.h"
 #include "Gain.h"
 #include "Osc/Osc.h"
-#include "Sample.h"
+#include "Type.h"

@@ -33,7 +33,7 @@ public:
    {
       float ratio = freq_hz_ / SAMPLE_RATE;
 
-      setDelta(sample2phase(ratio * 2.0));
+      setDelta(sample2uphase(ratio * 2.0));
    }
 
    //! Set frequency for MIDI note value
@@ -64,10 +64,10 @@ protected:
       return table_delta14_7[exp_freq + signed(EXP_FREQ_SCALE * mod_)];
    }
 
-   void setDelta(Phase delta_)
+   void setDelta(UPhase delta_)
    {
       delta = delta_;
-      dt    = phase2float(delta_);
+      dt    = uphase2float(delta_);
    }
 
    //! Polynomial to pre-filter hard edges in waveforms in the range [-dt, dt]
@@ -87,11 +87,11 @@ protected:
       return 0.0f;
    }
 
-   Phase phase{0}; //!< Phase     (x2pi) Q0.32
-   Phase delta{0}; //!< Phase inc (x2pi) Q0.32
+   UPhase phase{0}; //!< UPhase     (x2pi) Q0.32
+   UPhase delta{0}; //!< UPhase inc (x2pi) Q0.32
 
-   static const Phase PHASE_QUARTER = 0x40000000;
-   static const Phase PHASE_HALF    = PHASE_QUARTER * 2;
+   static const UPhase UPHASE_QUARTER = 0x40000000;
+   static const UPhase UPHASE_HALF    = UPHASE_QUARTER * 2;
 
 private:
    void updateExpFreq()

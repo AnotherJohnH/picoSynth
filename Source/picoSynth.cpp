@@ -11,7 +11,7 @@
 #include "Hardware/picoX7/Config.h"
 #include "Hardware/FilePortal.h"
 
-#include "SIG/Sample.h"
+#include "SIG/SIG.h"
 
 #include "Juno106/Synth.h"
 #include "VL1/Synth.h"
