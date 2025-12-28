@@ -13,3 +13,5 @@ add_library(SIG STATIC
             Table_amp15.cpp)
 
 target_include_directories(SIG PUBLIC .. ${CMAKE_CURRENT_BINARY_DIR})
+
+add_subdirectory(test)

@@ -24,7 +24,7 @@ public:
 
       for(unsigned bit = 0; bit < num_bits; ++bit)
       {
-         TYPE mask  = TYPE(1) << bit;
+         TYPE mask  = TYPE(1) << (num_bits - bit - 1);
          bool value = (pattern_ & mask) != 0;
 
          for(unsigned j = 0; j < samples_per_bit; ++j)

@@ -7,7 +7,7 @@
 
 namespace Simple {
 
-struct Control
+struct Patch
 {
    unsigned value{0};
 };

@@ -33,7 +33,7 @@ public:
    {
       float ratio = freq_hz_ / SAMPLE_RATE;
 
-      delta = sample2phase(ratio * 2.0);
+      setDelta(sample2phase(ratio * 2.0));
    }
 
    //! Set frequency for MIDI note value
@@ -58,23 +58,46 @@ public:
    }
 
 protected:
-   Phase    phase{0}; //!< Phase     (x2pi) Q0.32
-   Phase    delta{0}; //!< Phase inc (x2pi) Q0.32
-
-   static const Phase PHASE_QUARTER = 0x40000000;
-   static const Phase PHASE_HALF    = PHASE_QUARTER * 2;
-
    //! Calculate delta for a frequency modulation input
    uint32_t modDelta(Sample mod_)
    {
       return table_delta14_7[exp_freq + signed(EXP_FREQ_SCALE * mod_)];
    }
 
+   void setDelta(Phase delta_)
+   {
+      delta = delta_;
+      dt    = phase2t(delta_);
+   }
+
+   //! Polynomial to pre-filter hard edges in waveforms in the range [-dt, dt]
+   float polyBLEP(float t)
+   {
+      if (t < dt)
+      {
+         t = t / dt;
+         return t + t - t * t - 1.0f;
+      }
+      else if (t > (1.0f - dt))
+      {
+         t = (t - 1.0f) / dt;
+         return t + t + t*t + 1.0f;
+      }
+
+      return 0.0f;
+   }
+
+   Phase phase{0}; //!< Phase     (x2pi) Q0.32
+   Phase delta{0}; //!< Phase inc (x2pi) Q0.32
+
+   static const Phase PHASE_QUARTER = 0x40000000;
+   static const Phase PHASE_HALF    = PHASE_QUARTER * 2;
+
 private:
    void updateExpFreq()
    {
       exp_freq = (midi_note << EXP_FREQ_FRAC_BITS) + exp_freq_detune;
-      delta    = table_delta14_7[exp_freq];
+      setDelta(table_delta14_7[exp_freq]);
    }
 
    static const unsigned EXP_FREQ_FRAC_BITS = 7;
@@ -83,6 +106,7 @@ private:
    uint32_t exp_freq;           //!< Exponential frequency where 69.0 equivalent to 440 Hz (fixed-point-7)
    int32_t  exp_freq_detune{0}; //!< Detune (fixed-point-7)
    uint8_t  midi_note{0};       //!< MIDI note
+   float    dt{};
 };
 
 } // namespace Osc

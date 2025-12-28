@@ -9,12 +9,13 @@
 
 #include "../SynthVoiceSysEx.h"
 #include "Juno106/Program.h"
+#include "Juno106/Effect.h"
 #include "Juno106/Voice.h"
 #include "Juno106/SysEx.h"
 
 namespace Juno106 {
 
-class Synth : public ::SynthVoiceSysEx<Voice, /* NUM_VOICES */ 6, /* MAX_SYSEX_SIZE */ 3 + 18>
+class Synth : public ::SynthVoiceSysEx<Effect, Voice, /* NUM_VOICES */ 6, /* MAX_SYSEX_SIZE */ 3 + 18>
 {
 public:
    Synth()

@@ -7,8 +7,8 @@
 
 #include "SynthVoice.h"
 
-template <typename VOICE, unsigned NUM_VOICES, unsigned MAX_SYSEX_SIZE>
-class SynthVoiceSysEx : public SynthVoice<VOICE, NUM_VOICES>
+template <typename EFFECT, typename VOICE, unsigned NUM_VOICES, unsigned MAX_SYSEX_SIZE>
+class SynthVoiceSysEx : public SynthVoice<EFFECT, VOICE, NUM_VOICES>
 {
 public:
    SynthVoiceSysEx(uint8_t midi_manuf_id_)

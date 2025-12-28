@@ -7,7 +7,8 @@
 
 #include "SIG/SIG.h"
 
-#include "Control.h"
+#include "Effect.h"
+#include "Patch.h"
 
 namespace Simple {
 
@@ -16,9 +17,9 @@ class Voice
 public:
    Voice() = default;
 
-   void program(const Control* control_)
+   void program(const Patch* patch_)
    {
-      osc.gain = control_->value / 127.0f;
+      osc.gain = patch_->value / 127.0f;
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
@@ -34,19 +35,14 @@ public:
       gain = 0.0;
    }
 
-   Sample sample()
+   Sample sample(const Effect& effect_)
    {
       return gain(osc());
    }
 
-   static Sample effect(Sample sample_)
-   {
-      return sample_;
-   }
-
 private:
-   Osc::Sine osc{};
-   Gain      gain{0.0};
+   Osc::Square osc{};
+   Gain        gain{0.0};
 };
 
 } // namespace Simple

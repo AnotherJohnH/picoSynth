@@ -19,6 +19,9 @@ public:
    {
       Sample sample = phase2sample(phase);
 
+      float t = phase2t(phase - PHASE_HALF);
+      sample -= polyBLEP(t);
+
       phase += delta;
 
       return gain(sample);
@@ -26,9 +29,14 @@ public:
 
    Sample operator()(Sample mod_)
    {
+      setDelta(modDelta(mod_));
+
       Sample sample = phase2sample(phase);
 
-      phase += modDelta(mod_); 
+      float t = phase2t(phase - PHASE_HALF);
+      sample -= polyBLEP(t);
+
+      phase += delta;
 
       return gain(sample);
    }

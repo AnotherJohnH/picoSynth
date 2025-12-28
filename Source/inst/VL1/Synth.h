@@ -9,10 +9,11 @@
 #include "VL1/Voice.h"
 #include "VL1/Program.h"
 #include "VL1/Control.h"
+#include "VL1/Effect.h"
 
 namespace VL1 {
 
-class Synth : public ::SynthVoice<Voice, /* NUM_VOICES */ 8>
+class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 {
 public:
    Synth() = default;

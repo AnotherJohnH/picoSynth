@@ -8,11 +8,12 @@
 #include "../SynthVoice.h"
 
 #include "Voice.h"
-#include "Control.h"
+#include "Effect.h"
+#include "Patch.h"
 
 namespace Simple {
 
-class Synth : public ::SynthVoice<Voice, /* NUM_VOICES */ 8>
+class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 {
 public:
    Synth() = default;
@@ -31,13 +32,13 @@ private:
       switch(control_)
       {
       case 19: case 2:
-         control.value = editInt("VALUE", value_, 0, 127);
-         programVoices(&control);
+         patch.value = editInt("VALUE", value_, 0, 127);
+         programVoices(&patch);
          break;
       }
    }
 
-   Control control{};
+   Patch patch{};
 };
 
 } // namespace Simple

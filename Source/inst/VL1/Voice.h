@@ -9,6 +9,7 @@
 
 #include "VL1/Program.h"
 #include "VL1/Control.h"
+#include "VL1/Effect.h"
 
 namespace VL1 {
 
@@ -19,7 +20,7 @@ public:
 
    void init()
    {
-      lpf.setFreq(2000);
+      lpf.setFreq(1000);
 
       perc_env.setAttack_mS(0);
       perc_env.setSustain(0);
@@ -36,66 +37,66 @@ public:
       switch(patch_->wave)
       {
       case 0: // Piano
-         melody_osc.setPattern(uint16_t(0b1111111111100000));
+         melody.setPattern(uint16_t(0b1111111111100000));
          break;
 
       case 1: // Fantasy
-         melody_osc.setPattern(uint16_t(0b1111000011110000));
+         melody.setPattern(uint16_t(0b1111000011110000));
          break;
 
       case 2: // Violin
-         melody_osc.setPattern(uint16_t(0b1111011101101010));
+         melody.setPattern(uint16_t(0b1111011101101010));
          break;
 
       case 3: // Flute
-         melody_osc.setPattern(uint16_t(0b1111111100000000));
+         melody.setPattern(uint16_t(0b1111111100000000));
          break;
 
       case 4: // Guitar 1
-         melody_osc.setPattern(uint16_t(0b1000000100000000));
+         melody.setPattern(uint16_t(0b1000000100000000));
          voice_transpose = -12;
          break;
 
       case 5: // Guitar 2
-         melody_osc.setPattern(uint16_t(0b1011110011000000));
+         melody.setPattern(uint16_t(0b1011110011000000));
          voice_transpose = -12;
          break;
 
       case 6: // English Horn
-         melody_osc.setPattern(uint16_t(0b1100000000000000));
+         melody.setPattern(uint16_t(0b1100000000000000));
          voice_transpose = -12;
          break;
 
       case 7: // Electro-Sound 1 (octave modulated Piano)
-         melody_osc.setPattern(uint16_t(0b1111111111100000));
+         melody.setPattern(uint16_t(0b1111111111100000));
          octave_osc.gain = 12.0;
          break;
 
       case 8: // Electro-Sound 2 (octave modulated Fantasy)
-         melody_osc.setPattern(uint16_t(0b1111000011110000));
+         melody.setPattern(uint16_t(0b1111000011110000));
          octave_osc.gain = 12.0;
          break;
 
       case 9: // Electro-Sound 3 (octave modulated Flute)
-         melody_osc.setPattern(uint16_t(0b1111111100000000));
+         melody.setPattern(uint16_t(0b1111011101101010));
          octave_osc.gain = 12.0;
          break;
       }
 
-      melody_env.setAttack_mS(5 + patch_->attack_time * 50);
-      melody_env.setDecay_mS(patch_->decay_time * 800);
-      melody_env.setSustain(patch_->sustain_level * 127 / 9);
-      melody_env.setSustain_mS(patch_->sustain_time * 400);
-      melody_env.setRelease_mS(patch_->release_time * 400);
+      env.setAttack_mS(5 + patch_->attack_time * 50);
+      env.setDecay_mS(patch_->decay_time * 800);
+      env.setSustain(patch_->sustain_level * 127 / 9);
+      env.setSustain_mS(patch_->sustain_time * 250);
+      env.setRelease_mS(patch_->release_time * 250);
 
-      vibrato_osc.setFreq(1 + patch_->vibrato * 1.5);
-      vibrato_osc.gain = patch_->vibrato > 0 ? 0.1 : 0.0;  // 10 cents
+      vibrato.setFreq(1 + patch_->vibrato * 1.5);
+      vibrato.gain = patch_->vibrato > 0 ? 0.1 : 0.0;  // 10 cents
 
       tremolo_on = patch_->tremolo > 0;
       if (tremolo_on)
       {
-         tremolo_osc.setFreq(1 + patch_->tremolo * 1.5);
-         tremolo_osc.gain = 0.5;
+         tremolo.setFreq(1 + patch_->tremolo * 1.5);
+         tremolo.gain = 0.5;
       }
    }
 
@@ -109,7 +110,7 @@ public:
 
       perc_osc.gain.setPan(pan);
       perc_noise.gain.setPan(pan);
-      melody_osc.gain.setPan(1.0 - pan);
+      melody.gain.setPan(1.0 - pan);
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
@@ -139,12 +140,12 @@ public:
          break;
 
       default:
-         vibrato_osc.sync();
-         tremolo_osc.sync();
+         vibrato.sync();
+         tremolo.sync();
          octave_osc.sync();
-         melody_osc.setNote(note_ + voice_transpose);
-         melody_osc.sync();
-         melody_env.on();
+         melody.setNote(note_ + voice_transpose);
+         melody.sync();
+         env.on();
          mode = MELODY;
          break;
       }
@@ -152,10 +153,10 @@ public:
 
    void noteOff(uint8_t velocity_)
    {
-      melody_env.off();
+      env.off();
    }
 
-   Sample sample()
+   Sample sample(const Effect& effect_)
    {
       Sample value;
 
@@ -171,13 +172,13 @@ public:
 
       case MELODY:
          {
-            Sample freq_mod = melody_transpose + vibrato_osc() + octave_osc();
+            Sample freq_mod = melody_transpose + vibrato() + octave_osc();
 
-            value = melody_env() * lpf(melody_osc(freq_mod));
+            value = env() * lpf(melody(freq_mod));
 
             if (tremolo_on)
             {
-               value = value * (0.5f + tremolo_osc());
+               value = value * (0.5f + tremolo());
             }
          }
          break;
@@ -186,24 +187,19 @@ public:
       return volume(value);
    }
 
-   static Sample effect(Sample sample_)
-   {
-      return sample_;
-   }
-
 private:
    enum Mode { PERC_OSC, PERC_NOISE, MELODY };
 
    signed             voice_transpose{0};
    Mode               mode{};
    Osc::PwmPos        octave_osc{};
-   Osc::Triangle      vibrato_osc{};
-   Osc::Pulse         melody_osc{};
-   Adsr               melody_env{};
+   Osc::Triangle      vibrato{};
    float              melody_transpose{};
-   bool               tremolo_on{false};
-   Osc::Triangle      tremolo_osc{};
+   Osc::Pulse         melody{};
    Filter::FirstOrder lpf{Filter::LOPASS};
+   Adsr               env{};
+   bool               tremolo_on{false};
+   Osc::Triangle      tremolo{};
    Adsr               perc_env{};
    Osc::Pwm           perc_osc{};
    Osc::Noise         perc_noise{};

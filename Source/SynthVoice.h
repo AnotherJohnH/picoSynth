@@ -7,7 +7,7 @@
 
 #include "Synth.h"
 
-template <typename VOICE, unsigned NUM_VOICES>
+template <typename EFFECT, typename VOICE, unsigned NUM_VOICES>
 class SynthVoice : public Synth
 {
 public:
@@ -25,28 +25,33 @@ protected:
       }
    }
 
-   template <typename CONFIG>
-   void programVoices(const CONFIG* config_)
+   template <typename PATCH>
+   void programVoices(const PATCH* patch_)
    {
+      effect.program(patch_);
+
       for(unsigned i = 0; i < NUM_VOICES; ++i)
       {
-         voice[i].program(config_);
+         voice[i].program(patch_);
       }
    }
 
-   VOICE voice[NUM_VOICES];
+   EFFECT effect{};
+   VOICE  voice[NUM_VOICES];
 
 private:
    int16_t sample()
    {
+      effect.pre();
+
       Sample output = 0.0;
 
       for(unsigned i = 0; i < NUM_VOICES; ++i)
       {
-         output += voice[i].sample();
+         output += voice[i].sample(effect);
       }
 
-      output = VOICE::effect(output / NUM_VOICES);
+      output = effect.post(output / NUM_VOICES);
 
       return int16_t(output * 0x7FFF);
    }

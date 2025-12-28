@@ -16,6 +16,12 @@ inline Sample phase2sample(Phase phase_)
    return Sample(int32_t(phase_)) / 0x80000000;
 }
 
+//! Convert phase to 0.0..1.0 (2pi)
+inline float phase2t(Phase phase_)
+{
+   return float(phase_ >> 1) / 0x80000000;
+}
+
 //! Convert sample -1.0..1.0 to 32-bit phase
 inline Phase sample2phase(Sample sample_)
 {
