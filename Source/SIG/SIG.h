@@ -6,6 +6,8 @@
 #pragma once
 
 #include "Types.h"
+#include "Const.h"
+#include "Conv.h"
 #include "Delay.h"
 #include "Env/Env.h"
 #include "Filter/Filter.h"

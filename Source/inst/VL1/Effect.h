@@ -29,7 +29,7 @@ public:
    {
    }
 
-   Signal post(Signal signal_)
+   SIG::Signal post(SIG::Signal signal_)
    {
       return signal_;
    }

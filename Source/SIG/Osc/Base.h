@@ -9,6 +9,8 @@
 
 #include "Table_delta14_7.h"
 
+namespace SIG {
+
 namespace Osc {
 
 class Base
@@ -110,3 +112,5 @@ private:
 };
 
 } // namespace Osc
+
+} // namespace SIG

@@ -10,6 +10,8 @@
 #include "SIG/Types.h"
 #include "SIG/Filter/Type.h"
 
+namespace SIG {
+
 namespace Filter {
 
 class BiQuad
@@ -27,9 +29,9 @@ public:
       computeCoef();
    }
 
-   void setFreq(float freq_)
+   void setFreq(Freq freq_)
    {
-      float w0 = W0_1HZ * freq_;
+      Freq w0 = W0_1HZ * freq_;
 
       setSinCosW0(sinf(w0), cosf(w0));
    }
@@ -138,7 +140,7 @@ private:
       }
    }
 
-   const float W0_1HZ{2 * M_PI / SAMPLE_RATE};  //!< Angular frequency for 1Hz
+   const Freq W0_1HZ{2 * M_PI / SAMPLE_RATE};  //!< Angular frequency for 1Hz
 
    // Configuration
    Type        type{OFF};
@@ -162,3 +164,5 @@ private:
 };
 
 } // namespace Filter
+
+} // namespace SIG

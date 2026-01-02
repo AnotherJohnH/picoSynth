@@ -10,6 +10,8 @@
 #include "SIG/Types.h"
 #include "SIG/Filter/Type.h"
 
+namespace SIG {
+
 namespace Filter {
 
 class FirstOrder
@@ -97,3 +99,5 @@ private:
 };
 
 } // namespace Filter
+
+} // namespace SIG

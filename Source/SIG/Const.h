@@ -5,22 +5,17 @@
    
 #pragma once
 
-#include <cstdint>
+#include "SIG/Types.h"
 
 namespace SIG {
 
-#if defined(SIG_FP64)
-using Float = double;
+static const SPhase SPHASE_MAX{0x7FFFFFFF};
+static const UPhase UPHASE_MAX{0xFFFFFFFF};
+
+#if defined(SIG_44_1KHz)
+static const Rate SAMPLE_RATE{44100};   //!< 44.1 kHz
 #else
-using Float = float;
+static const Rate SAMPLE_RATE{48000};   //!< 48 kHz
 #endif
-
-using Signal = Float;
-using Phase  = Float;
-using Freq   = Float;
-
-using UPhase = uint32_t;
-using SPhase = int32_t;
-using Rate   = unsigned;
 
 } // namespace SIG

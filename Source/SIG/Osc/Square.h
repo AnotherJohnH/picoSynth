@@ -8,6 +8,8 @@
 #include "SIG/Osc/Base.h"
 #include "SIG/Gain.h"
 
+namespace SIG {
+
 namespace Osc {
 
 class Square : public Base
@@ -49,3 +51,5 @@ public:
 };
 
 } // namespace Osc
+
+} // namespace SIG

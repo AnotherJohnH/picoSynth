@@ -7,6 +7,10 @@
 
 #include "Table_amp15.h"
 
+#include "SIG/Types.h"
+
+namespace SIG {
+
 class Adsr
 {
 public:
@@ -144,3 +148,5 @@ private:
    int32_t  phase_level[NUM_PHASES] = {};
    int32_t  phase_samples[NUM_PHASES] = {};
 };
+
+} // namespace SIG

@@ -8,6 +8,8 @@
 #include "SIG/Osc/Base.h"
 #include "SIG/Gain.h"
 
+namespace SIG {
+
 namespace Osc {
 
 class Triangle : public Base
@@ -47,3 +49,5 @@ public:
 };
 
 } // namespace Osc
+
+} // namespace SIG

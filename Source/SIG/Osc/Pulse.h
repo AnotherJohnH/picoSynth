@@ -7,6 +7,8 @@
 
 #include "SIG/Osc/Base.h"
 
+namespace SIG {
+
 namespace Osc {
 
 class Pulse : public Base
@@ -36,7 +38,7 @@ public:
 
    Signal operator()()
    {
-      unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+      unsigned index = phase >> (sizeof(UPhase) * 8 - LOG2_PATTERN_LENGTH);
 
       delay[2] = delay[1];
       delay[1] = delay[0];
@@ -64,7 +66,7 @@ public:
    {
       setDelta(modDelta(mod_));
 
-      unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+      unsigned index = phase >> (sizeof(UPhase) * 8 - LOG2_PATTERN_LENGTH);
 
       delay[2] = delay[1];
       delay[1] = delay[0];
@@ -99,3 +101,5 @@ private:
 };
 
 } // namespace Osc
+
+} // namespace SIG

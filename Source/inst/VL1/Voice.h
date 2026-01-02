@@ -156,9 +156,9 @@ public:
       env.off();
    }
 
-   Signal sample(const Effect& effect_)
+   SIG::Signal sample(const Effect& effect_)
    {
-      Signal value;
+      SIG::Signal value;
 
       switch(mode)
       {
@@ -172,7 +172,7 @@ public:
 
       case MELODY:
          {
-            Signal freq_mod = melody_transpose + vibrato() + octave_osc();
+            SIG::Signal freq_mod = melody_transpose + vibrato() + octave_osc();
 
             value = env() * lpf(melody(freq_mod));
 
@@ -190,20 +190,20 @@ public:
 private:
    enum Mode { PERC_OSC, PERC_NOISE, MELODY };
 
-   signed                   voice_transpose{0};
-   Mode                     mode{};
-   Osc::PwmShift<1.0f,0.0f> octave_osc{};
-   Osc::Triangle            vibrato{};
-   float                    melody_transpose{};
-   Osc::Pulse               melody{};
-   Filter::FirstOrder       lpf{Filter::LOPASS};
-   Adsr                     env{};
-   bool                     tremolo_on{false};
-   Osc::Triangle            tremolo{};
-   Adsr                     perc_env{};
-   Osc::Pwm                 perc_osc{};
-   Osc::Noise               perc_noise{};
-   Gain                     volume{};
+   signed                        voice_transpose{0};
+   Mode                          mode{};
+   SIG::Osc::PwmShift<1.0f,0.0f> octave_osc{};
+   SIG::Osc::Triangle            vibrato{};
+   float                         melody_transpose{};
+   SIG::Osc::Pulse               melody{};
+   SIG::Filter::FirstOrder       lpf{SIG::Filter::LOPASS};
+   SIG::Adsr                     env{};
+   bool                          tremolo_on{false};
+   SIG::Osc::Triangle            tremolo{};
+   SIG::Adsr                     perc_env{};
+   SIG::Osc::Pwm                 perc_osc{};
+   SIG::Osc::Noise               perc_noise{};
+   SIG::Gain                     volume{};
 };
 
 } // namespace VL1

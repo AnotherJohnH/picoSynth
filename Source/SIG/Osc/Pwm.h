@@ -8,6 +8,8 @@
 #include "SIG/Osc/Base.h"
 #include "SIG/Gain.h"
 
+namespace SIG {
+
 namespace Osc {
 
 template <Signal HIGH, Signal LOW>
@@ -61,3 +63,5 @@ private:
 using Pwm = PwmShift<+1.0f,-1.0f>;
 
 } // namespace Osc
+
+} // namespace SIG

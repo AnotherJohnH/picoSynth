@@ -44,7 +44,7 @@ private:
    {
       effect.pre();
 
-      Signal output = 0.0;
+      SIG::Signal output = 0.0;
 
       for(unsigned i = 0; i < NUM_VOICES; ++i)
       {

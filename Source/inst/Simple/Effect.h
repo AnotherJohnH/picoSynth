@@ -27,7 +27,7 @@ public:
    }
 
    //! Signal processing post voice signal generation on the summed voices
-   Signal post(Signal signal_)
+   SIG::Signal post(SIG::Signal signal_)
    {
       return signal_;
    }

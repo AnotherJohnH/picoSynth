@@ -7,6 +7,8 @@
 
 #include "SIG.h"
 
+namespace SIG {
+
 template <unsigned LENGTH>
 class Delay
 {
@@ -39,3 +41,5 @@ private:
    unsigned index{};
    Signal   buffer[LENGTH];
 };
+
+} // namespace SIG

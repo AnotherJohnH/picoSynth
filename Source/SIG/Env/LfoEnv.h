@@ -5,6 +5,8 @@
    
 #pragma once
 
+namespace SIG {
+
 class LfoEnv
 {
 public:
@@ -72,3 +74,5 @@ private:
    unsigned attack_samples{};
    Signal   attack_rate{0.0};
 };
+
+} // namespace SIG

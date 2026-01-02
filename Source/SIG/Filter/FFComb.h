@@ -8,6 +8,8 @@
 #include "SIG/Delay.h"
 #include "SIG/Gain.h"
 
+namespace SIG {
+
 class FFComb
 {
 public:
@@ -23,3 +25,5 @@ public:
 private:
    Delay<1> delay;
 };
+
+} // namespace SIG

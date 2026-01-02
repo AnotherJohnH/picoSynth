@@ -10,6 +10,8 @@
 #include "Types.h"
 #include "Table_atten15.h"
 
+namespace SIG {
+
 class Gain
 {
 public:
@@ -43,3 +45,5 @@ public:
 private:
    Signal value{1.0};
 };
+
+} // namespace SIG

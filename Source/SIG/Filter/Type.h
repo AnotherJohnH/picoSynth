@@ -5,6 +5,8 @@
    
 #pragma once
 
+namespace SIG {
+
 namespace Filter {
 
 enum Type
@@ -18,3 +20,5 @@ enum Type
 };
 
 } // namespacde Filter
+
+} // namespacde SIG

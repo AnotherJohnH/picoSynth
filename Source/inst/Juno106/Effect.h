@@ -30,12 +30,12 @@ public:
       lfo_out = lfo();
    }
 
-   Signal post(Signal signal_)
+   SIG::Signal post(SIG::Signal signal_)
    {
       return signal_;
    }
 
-   Signal lfo_out{};
+   SIG::Signal lfo_out{};
 
 private:
    //! Scale a MIDI parameter 0..127 to a floating point value
@@ -47,7 +47,7 @@ private:
    static constexpr float LFO_FREQ_MIN   = 0.1;  //!< LFO FREQ   0 => 0.1 Hz
    static constexpr float LFO_FREQ_MAX   = 30.0; //!< LFO FREQ  10 => 30 Hz
 
-   Osc::Triangle lfo{};
+   SIG::Osc::Triangle lfo{};
 };
 
 } // namespace Juno106

@@ -91,20 +91,20 @@ public:
       gate = 0.0;
    }
 
-   Signal sample(const Effect& effect_)
+   SIG::Signal sample(const Effect& effect_)
    {
-      Signal lfo_out = effect_.lfo_out * lfo_env();
+      SIG::Signal lfo_out = effect_.lfo_out * lfo_env();
 
       if (dco_pwm_lfo)
       {
          dco_pwm.setWidth((1.0 + lfo_out) * dco_pwm_lfo_gain);
       }
 
-      Signal fmod = lfo_out * dco_lfo;
+      SIG::Signal fmod = lfo_out * dco_lfo;
 
-      Signal dco_out = (dco_saw(fmod) + dco_pwm(fmod) + dco_sub(fmod) + noise()) / 4;
+      SIG::Signal dco_out = (dco_saw(fmod) + dco_pwm(fmod) + dco_sub(fmod) + noise()) / 4;
 
-      Signal env_out = env();
+      SIG::Signal env_out = env();
 
       return vca(vcf(dco_out) * (vca_gate ? gate : env_out));
    }
@@ -128,22 +128,22 @@ private:
    static constexpr float LFO_DELAY_MAX  = 3;    //!< LFO DELAY 10 => 3s
    static constexpr float LFO_ENV_ATTACK = 0.2;  //!< LFO envelope attack time 0.2s
 
-   signed         transpose{0};
-   uint8_t        note{};
-   Osc::Triangle  lfo{};
-   LfoEnv         lfo_env{};
-   Signal         dco_lfo{};
-   Signal         dco_pwm_lfo_gain{};
-   bool           dco_pwm_lfo{};
-   Osc::Ramp      dco_saw{};
-   Osc::Pwm       dco_pwm{};
-   Osc::Pwm       dco_sub{};
-   Osc::Noise     noise{};
-   Adsr           env{};
-   Filter::BiQuad vcf{Filter::LOPASS};
-   Gain           vca{};
-   bool           vca_gate{};
-   Signal         gate{};
+   signed              transpose{0};
+   uint8_t             note{};
+   SIG::Osc::Triangle  lfo{};
+   SIG::LfoEnv         lfo_env{};
+   SIG::Signal         dco_lfo{};
+   SIG::Signal         dco_pwm_lfo_gain{};
+   bool                dco_pwm_lfo{};
+   SIG::Osc::Ramp      dco_saw{};
+   SIG::Osc::Pwm       dco_pwm{};
+   SIG::Osc::Pwm       dco_sub{};
+   SIG::Osc::Noise     noise{};
+   SIG::Adsr           env{};
+   SIG::Filter::BiQuad vcf{SIG::Filter::LOPASS};
+   SIG::Gain           vca{};
+   bool                vca_gate{};
+   SIG::Signal         gate{};
 };
 
 } // namespace Juno106

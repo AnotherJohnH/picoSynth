@@ -7,6 +7,8 @@
 
 #include "STB/Test.h"
 
+using namespace SIG;
+
 TEST(SIG_osc, square)
 {
    Osc::Square osc{};

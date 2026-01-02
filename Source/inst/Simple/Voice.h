@@ -35,14 +35,14 @@ public:
       gain = 0.0;
    }
 
-   Signal sample(const Effect& effect_)
+   SIG::Signal sample(const Effect& effect_)
    {
       return gain(osc());
    }
 
 private:
-   Osc::Square osc{};
-   Gain        gain{0.0};
+   SIG::Osc::Square osc{};
+   SIG::Gain        gain{0.0};
 };
 
 } // namespace Simple

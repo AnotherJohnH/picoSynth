@@ -10,6 +10,8 @@
 #include "SIG/Osc/Base.h"
 #include "SIG/Gain.h"
 
+namespace SIG {
+
 namespace Osc {
 
 class Sine : public Base
@@ -39,3 +41,5 @@ public:
 };
 
 } // namespace Osc
+
+} // namespace SIG

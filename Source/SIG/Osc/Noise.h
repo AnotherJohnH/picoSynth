@@ -7,6 +7,8 @@
 
 #include "SIG/Gain.h"
 
+namespace SIG {
+
 namespace Osc {
 
 class Noise
@@ -30,3 +32,5 @@ private:
 };
 
 } // namespace Osc
+
+} // namespace SIG
