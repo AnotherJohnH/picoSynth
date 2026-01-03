@@ -6,6 +6,7 @@
 #pragma once
 
 #include "SIG/Types.h"
+#include "SIG/Const.h"
 
 namespace SIG {
 
