@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_subdirectory(SIG)
 add_subdirectory(inst)
 
 add_picoX7_executable(picoSynth
