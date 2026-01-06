@@ -16,19 +16,21 @@
 #include "Juno106/Synth.h"
 #include "VL1/Synth.h"
 #include "Simple/Synth.h"
+#include "BBCMicro/Synth.h"
 
+static const bool     MIDI_DEBUG       = false;
+static const bool     PROFILE          = false;
 
 static const unsigned DAC_FREQ         = SIG::SAMPLE_RATE;
 static const unsigned TICK_RATE        = 400;                   //!< 400 Hz
 static const unsigned SAMPLES_PER_TICK = DAC_FREQ / TICK_RATE;  //!< DAC buffer size (16 bit samples)
-static const bool     MIDI_DEBUG       = false;
-static const bool     PROFILE          = false;
-static const unsigned NUM_SYNTHS       = 3;
+static const unsigned NUM_SYNTHS       = 4;
 
+static Juno106::Synth  juno106{};
+static VL1::Synth      vl1{};
+static Simple::Synth   simple{};
+static BBCMicro::Synth bbc_micro{};
 
-static Juno106::Synth juno106{};
-static VL1::Synth     vl1{};
-static Simple::Synth  simple{};
 static Synth*         synth{};
 static unsigned       synth_index{0};
 
@@ -116,9 +118,10 @@ void initSynth()
 {
    switch(synth_index)
    {
-   case 0: synth = &juno106; break;
-   case 1: synth = &vl1;     break;
-   case 2: synth = &simple;  break;
+   case 0: synth = &juno106;   break;
+   case 1: synth = &vl1;       break;
+   case 2: synth = &simple;    break;
+   case 3: synth = &bbc_micro; break;
    }
 
    usb.attachInstrument(1, *synth);
