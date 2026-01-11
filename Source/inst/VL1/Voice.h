@@ -104,13 +104,13 @@ public:
    {
       melody_transpose = (signed(control_->octave) - 1) * 12 + control_->tune / 50.0f;
 
-      volume.setAtten_dB(-control_->gain);
+      volume = SIG::dBGainLookup(control_->gain);
 
-      float pan = (50 + control_->balance) / 100.0f;
+      SIG::Float pan = (50 + control_->balance) / 100.0f;
 
-      perc_osc.gain.setPan(pan);
-      perc_noise.gain.setPan(pan);
-      melody.gain.setPan(1.0 - pan);
+      perc_osc.gain   = SIG::pan2signal(pan);
+      perc_noise.gain = SIG::pan2signal(pan);
+      melody.gain     = SIG::pan2signal(1.0 - pan);
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
@@ -156,6 +156,8 @@ public:
       env.off();
    }
 
+   void tick(const Effect& effect_, unsigned n_) {}
+
    SIG::Signal sample(const Effect& effect_)
    {
       SIG::Signal value;
@@ -197,10 +199,10 @@ private:
    float                         melody_transpose{};
    SIG::Osc::Pulse               melody{};
    SIG::Filter::FirstOrder       lpf{SIG::Filter::LOPASS};
-   SIG::Adsr                     env{};
+   SIG::Env::Adsr                env{};
    bool                          tremolo_on{false};
    SIG::Osc::Triangle            tremolo{};
-   SIG::Adsr                     perc_env{};
+   SIG::Env::Adsr                perc_env{};
    SIG::Osc::Pwm                 perc_osc{};
    SIG::Osc::Noise               perc_noise{};
    SIG::Gain                     volume{};

@@ -15,7 +15,12 @@ namespace Simple {
 class Voice
 {
 public:
-   Voice() = default;
+   Voice()
+   {
+      //lfo.setFreq(30.0f, 1600);
+      lfo.setFreq(30.0f);
+      lfo_out.setUpdateRate(1600);
+   }
 
    void program(const Patch* patch_)
    {
@@ -35,13 +40,20 @@ public:
       gain = 0.0;
    }
 
+   void tick(const Effect& effect_, unsigned n_)
+   {
+      lfo_out = lfo();
+   }
+
    SIG::Signal sample(const Effect& effect_)
    {
-      return gain(osc());
+      return lfo();
    }
 
 private:
-   SIG::Osc::Square osc{};
+   SIG::Osc::Sine   lfo{};
+   SIG::LinSlew     lfo_out{};
+   SIG::Osc::Sine   osc{};
    SIG::Gain        gain{0.0};
 };
 

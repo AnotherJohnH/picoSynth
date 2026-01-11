@@ -21,9 +21,8 @@
 static const bool     MIDI_DEBUG       = false;
 static const bool     PROFILE          = false;
 
-static const unsigned DAC_FREQ         = SIG::SAMPLE_RATE;
-static const unsigned TICK_RATE        = 400;                   //!< 400 Hz
-static const unsigned SAMPLES_PER_TICK = DAC_FREQ / TICK_RATE;  //!< DAC buffer size (16 bit samples)
+static const unsigned TICK_RATE        = 800;                           //!< 800 Hz
+static const unsigned SAMPLES_PER_TICK = SIG::SAMPLE_RATE / TICK_RATE;  //!< DAC buffer size (16 bit samples)
 static const unsigned NUM_SYNTHS       = 4;
 
 static Juno106::Synth  juno106{};
@@ -60,7 +59,7 @@ extern "C" void IRQ_USBCTRL() { usb.irq(); }
 
 // --- DAC ---------------------------------------------------------------------
 
-static hw::Audio<SAMPLES_PER_TICK> audio{DAC_FREQ};
+static hw::Audio<SAMPLES_PER_TICK> audio{SIG::SAMPLE_RATE};
 
 static void hwTick();
 

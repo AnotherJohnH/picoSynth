@@ -10,8 +10,7 @@
 
 #include "SIG/SIG.h"
 
-#include "Table_amp7.h"
-#include "Table_gain7.h"
+#include "Table_freq7.h"
 
 namespace Juno106 {
 
@@ -53,10 +52,10 @@ public:
 
       dco_saw.gain = patch_->saw ? 1.0 : 0.0;
       dco_pwm.gain = patch_->pwm ? 1.0 : 0.0;
-      dco_sub.gain = table_amp7[patch_->sub_osc_level];
-      noise.gain   = table_amp7[patch_->noise_level];
+      dco_sub.gain = SIG::dBAttenLookup_7(0x7F - patch_->sub_osc_level);
+      noise.gain   = SIG::dBAttenLookup_7(0x7F - patch_->noise_level);
 
-      vcf.setFreq(scaleMidi(patch_->vcf_freq, 10.0, 20000.0));
+      vcf.setFreq(table_freq7[patch_->vcf_freq]);
       vcf.setQ(scaleMidi(patch_->vcf_res, 0.1, 4.0));
 
       env.setAttack_mS(1 + patch_->env_attack * 3000 / 127);
@@ -64,7 +63,7 @@ public:
       env.setSustain(patch_->env_sustain);
       env.setRelease_mS(1 + patch_->env_release * 12000 / 127);
 
-      vca      = table_gain7[patch_->vca_level];
+      vca      = SIG::dBGainLookup((patch_->vca_level * 40.0f / 127) - 20.0f);
       vca_gate = patch_->vca_gate;
    }
 
@@ -90,6 +89,8 @@ public:
 
       gate = 0.0;
    }
+
+   void tick(const Effect& effect_, unsigned n_) {}
 
    SIG::Signal sample(const Effect& effect_)
    {
@@ -128,22 +129,21 @@ private:
    static constexpr float LFO_DELAY_MAX  = 3;    //!< LFO DELAY 10 => 3s
    static constexpr float LFO_ENV_ATTACK = 0.2;  //!< LFO envelope attack time 0.2s
 
-   signed              transpose{0};
-   uint8_t             note{};
-   SIG::Osc::Triangle  lfo{};
-   SIG::LfoEnv         lfo_env{};
-   SIG::Signal         dco_lfo{};
-   SIG::Signal         dco_pwm_lfo_gain{};
-   bool                dco_pwm_lfo{};
-   SIG::Osc::Ramp      dco_saw{};
-   SIG::Osc::Pwm       dco_pwm{};
-   SIG::Osc::Pwm       dco_sub{};
-   SIG::Osc::Noise     noise{};
-   SIG::Adsr           env{};
-   SIG::Filter::BiQuad vcf{SIG::Filter::LOPASS};
-   SIG::Gain           vca{};
-   bool                vca_gate{};
-   SIG::Signal         gate{};
+   signed                  transpose{0};
+   uint8_t                 note{};
+   SIG::LfoEnv             lfo_env{};
+   SIG::Signal             dco_lfo{};
+   SIG::Signal             dco_pwm_lfo_gain{};
+   bool                    dco_pwm_lfo{};
+   SIG::Osc::Ramp          dco_saw{};
+   SIG::Osc::Pwm           dco_pwm{};
+   SIG::Osc::Pwm           dco_sub{};
+   SIG::Osc::Noise         noise{};
+   SIG::Env::Adsr          env{};
+   SIG::Filter::DualBiQuad vcf{SIG::Filter::LOPASS};
+   SIG::Gain               vca{};
+   bool                    vca_gate{};
+   SIG::Signal             gate{};
 };
 
 } // namespace Juno106

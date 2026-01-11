@@ -34,6 +34,8 @@ public:
       gain = 0.0;
    }
 
+   void tick(const Effect& effect_, unsigned n_) {}
+
    SIG::Signal sample(const Effect& effect_)
    {
       SIG::Signal signal;

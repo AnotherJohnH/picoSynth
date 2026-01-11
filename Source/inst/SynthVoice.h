@@ -58,6 +58,13 @@ private:
 
    void getSamples(uint32_t* buffer, unsigned n) override
    {
+      effect.tick(n);
+
+      for(unsigned i = 0; i < NUM_VOICES; ++i)
+      {
+         voice[i].tick(effect, n);
+      }
+
       for(unsigned i = 0; i < n; ++i)
       {
          int16_t mono = sample();

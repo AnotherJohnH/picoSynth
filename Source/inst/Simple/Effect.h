@@ -21,6 +21,8 @@ public:
    {
    }
 
+   void tick(unsigned n_) {}
+
    //! Signal processing pre voice signal generation
    void pre()
    {

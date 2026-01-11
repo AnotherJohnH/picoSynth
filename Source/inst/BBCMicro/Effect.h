@@ -21,6 +21,11 @@ public:
    {
    }
 
+   //! Low frequency signal processing
+   void tick(unsigned n_)
+   {
+   }
+
    //! Signal processing pre voice signal generation
    void pre()
    {

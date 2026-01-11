@@ -20,10 +20,20 @@ public:
    }
 
    //! Program control from a SYSEX patch
-   void program(const SysEx* patch_)
+   void program(const SysEx* sysex_)
    {
-      lfo.setFreq(scaleMidi(patch_->lfo_rate, LFO_FREQ_MIN, LFO_FREQ_MAX));
+      lfo.setFreq(scaleMidi(sysex_->lfo_rate, LFO_FREQ_MIN, LFO_FREQ_MAX));
+
+      enable_lsf = sysex_->hpf  == SysEx::HPF_0;
+      enable_hpf = (sysex_->hpf == SysEx::HPF_2) || (sysex_->hpf == SysEx::HPF_3);
+      if (enable_hpf)
+      {
+          hpf.setFreq(sysex_->hpf == SysEx::HPF_2 ? 225.0f /* Hz */
+                                                  : 700.0f /* Hz */);
+      }
    }
+
+   void tick(unsigned n_) {}
 
    void pre()
    {
@@ -32,7 +42,8 @@ public:
 
    SIG::Signal post(SIG::Signal signal_)
    {
-      return signal_;
+      return enable_hpf ? hpf(signal_)
+                        : signal_;
    }
 
    SIG::Signal lfo_out{};
@@ -47,7 +58,10 @@ private:
    static constexpr float LFO_FREQ_MIN   = 0.1;  //!< LFO FREQ   0 => 0.1 Hz
    static constexpr float LFO_FREQ_MAX   = 30.0; //!< LFO FREQ  10 => 30 Hz
 
-   SIG::Osc::Triangle lfo{};
+   SIG::Osc::Triangle      lfo{};
+   bool                    enable_lsf{false};
+   bool                    enable_hpf{false};
+   SIG::Filter::FirstOrder hpf{SIG::Filter::HIPASS};
 };
 
 } // namespace Juno106
