@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_subdirectory(VL1)
-add_subdirectory(Juno106)
-add_subdirectory(PhysM)
-add_subdirectory(Simple)
+add_library(PhysM INTERFACE)
+
+target_include_directories(PhysM INTERFACE ..)

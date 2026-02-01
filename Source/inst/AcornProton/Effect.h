@@ -9,7 +9,7 @@
 
 #include "Patch.h"
 
-namespace BBCMicro {
+namespace AcornProton {
 
 class Effect
 {
@@ -38,4 +38,4 @@ public:
    }
 };
 
-} // namespace BBCMicro
+} // namespace AcornProton

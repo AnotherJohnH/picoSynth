@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace BBCMicro {
+namespace AcornProton {
 
 struct Patch
 {
@@ -26,4 +26,4 @@ struct Patch
    uint8_t env_ald;
 };
 
-} // namespace BBCMicro
+} // namespace AcornProton

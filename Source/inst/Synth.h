@@ -138,6 +138,35 @@ protected:
       return value;
    }
 
+   float editFlt(const char* name_,
+                 uint8_t     midi_value_,
+                 float       min_,
+                 float       max_,
+                 const char* unit_ = "")
+   {
+      float value = min_ + midi_value_ * (max_ - min_) / 127.0f;
+
+      char text[17];
+      if (min_ < 0.0f)
+      {
+         char sign        = value < 0.0f ? '-' : value > 0.0f ? '+' : ' ';
+         unsigned valx100 = abs(signed(value * 100.0f));
+         unsigned units   = valx100 / 100;
+         unsigned frac    = valx100 % 100;
+         snprintf(text, sizeof(text), "%s %c%u.%02u %s", name_, sign, units, frac, unit_);
+      }
+      else
+      {
+         unsigned valx100 = unsigned(value * 100.0f);
+         unsigned units   = valx100 / 100;
+         unsigned frac    = valx100 % 100;
+         snprintf(text, sizeof(text), "%s %u.%02u %s", name_, units, frac, unit_);
+      }
+      setText(1, text);
+
+      return value;
+   }
+
    bool modInt(uint8_t& value_, signed delta_, unsigned n_, const char* str_table_[])
    {
       if (((delta_ < 0) && (value_ == 0)) ||

@@ -10,7 +10,7 @@
 #include "Effect.h"
 #include "Patch.h"
 
-namespace BBCMicro {
+namespace AcornProton {
 
 class Voice
 {
@@ -58,4 +58,4 @@ private:
    SIG::Gain        gain{0.0};
 };
 
-} // namespace BBCMicro
+} // namespace AcornProton

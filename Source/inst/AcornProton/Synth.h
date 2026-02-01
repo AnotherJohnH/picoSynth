@@ -11,7 +11,7 @@
 #include "Voice.h"
 #include "Patch.h"
 
-namespace BBCMicro {
+namespace AcornProton {
 
 class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 {
@@ -21,7 +21,7 @@ public:
 private:
    void synthInit() override
    {
-      setText(0, "   BBC Micro    ");
+      setText(0, "  Acorn Proton  ");
    }
 
    void synthControl(uint8_t control_, uint8_t value_) override
@@ -98,4 +98,4 @@ private:
    Patch patch{};
 };
 
-} // namespace BBCMicro
+} // namespace AcornProton
