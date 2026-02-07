@@ -7,7 +7,7 @@
 
 #include "SIG/SIG.h"
 
-#include "Effect.h"
+#include "NoEffect.h"
 #include "Patch.h"
 
 namespace PhysM {
@@ -40,11 +40,11 @@ public:
    {
    }
 
-   void tick(const Effect& effect_, unsigned n_)
+   void tick(const NoEffect& effect_, unsigned n_)
    {
    }
 
-   SIG::Signal sample(const Effect& effect_)
+   SIG::Signal sample(const NoEffect& effect_)
    {
       SIG::Signal signal = noise() * (exciter() + 0.5);
 

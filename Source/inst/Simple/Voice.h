@@ -7,7 +7,7 @@
 
 #include "SIG/SIG.h"
 
-#include "Effect.h"
+#include "NoEffect.h"
 #include "Patch.h"
 
 namespace Simple {
@@ -17,44 +17,68 @@ class Voice
 public:
    Voice()
    {
-      //lfo.setFreq(30.0f, 1600);
-      lfo.setFreq(30.0f);
-      lfo_out.setUpdateRate(1600);
+      env.setAttack_mS(0);
+      env.setDecay_mS(100000.0);
+      env.setSustain(0);
+      env.setSustain_mS(0);
+      env.setRelease_mS(10.0);
+
+      osc.setFreq(440.0f);
+      poly5_clip.setN(0.0f);
    }
 
    void program(const Patch* patch_)
    {
-      osc.gain = patch_->value / 127.0f;
+      clip  = patch_->clip;
+      gain  = patch_->gain;
+      drive = patch_->drive;
+
+      osc.setNote(patch_->f_coarse);
+      poly5_clip.setN(patch_->n);
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
    {
       osc.setNote(note_);
       osc.sync();
-
-      gain = 1.0;
+      env.on();
    }
 
    void noteOff(uint8_t velocity_)
    {
-      gain = 0.0;
+      env.off();
    }
 
-   void tick(const Effect& effect_, unsigned n_)
-   {
-      lfo_out = lfo();
-   }
+   void tick(const NoEffect& effect_, unsigned n_) {}
 
-   SIG::Signal sample(const Effect& effect_)
+   SIG::Signal sample(const NoEffect& effect_)
    {
-      return lfo();
+      SIG::Signal out = gain(osc()) * env();
+
+      switch(clip)
+      {
+      case 0: out = no_clip(out);    break;
+      case 1: out = hard_clip(out);  break;
+      case 2: out = poly_clip(out);  break;
+      case 3: out = poly5_clip(out); break;
+      case 4: out = tanh_clip(out, drive); break;
+      }
+
+      return out;
    }
 
 private:
-   SIG::Osc::Sine   lfo{};
-   SIG::LinSlew     lfo_out{};
+   SIG::Float       drive{};
+   uint8_t          clip{};
    SIG::Osc::Sine   osc{};
-   SIG::Gain        gain{0.0};
+   SIG::Env::Adsr   env{};
+   SIG::Gain        gain{};
+
+   SIG::Clip::No    no_clip{};
+   SIG::Clip::Hard  hard_clip{};
+   SIG::Clip::Poly  poly_clip{};
+   SIG::Clip::Poly5 poly5_clip{};
+   SIG::Clip::Tanh  tanh_clip{};
 };
 
 } // namespace Simple

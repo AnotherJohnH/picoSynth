@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------------
-// Copyright (c) 2025 John D. Haughton
+// Copyright (c) 2026 John D. Haughton
 // SPDX-License-Identifier: MIT
 //-------------------------------------------------------------------------------
 
@@ -7,32 +7,20 @@
 
 #include "SIG/SIG.h"
 
-#include "Patch.h"
-
-namespace Simple {
-
-class Effect
+class NoEffect
 {
 public:
-   Effect() = default;
+   NoEffect() = default;
 
    //! Configure the voice
-   void program(const Patch* patch_)
-   {
-   }
+   template <typename PATCH>
+   void program(const PATCH* patch_) {}
 
    void tick(unsigned n_) {}
 
    //! Signal processing pre voice signal generation
-   void pre()
-   {
-   }
+   void pre() {}
 
    //! Signal processing post voice signal generation on the summed voices
-   SIG::Signal post(SIG::Signal signal_)
-   {
-      return signal_;
-   }
+   SIG::Signal post(SIG::Signal signal_) { return signal_; }
 };
-
-} // namespace Simple

@@ -8,4 +8,4 @@ add_subdirectory(inst)
 add_picoX7_executable(picoSynth
                          picoSynth.cpp
                       LIBRARIES
-                         Juno106 Simple VL1 SIG)
+                         Juno106 Simple VL1 TB303 SIG)

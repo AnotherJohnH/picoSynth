@@ -5,15 +5,14 @@
 
 #pragma once
 
-namespace Simple {
+namespace TB_303 {
 
-struct Patch
+struct Control
 {
-   uint8_t clip{};
-   uint8_t f_coarse{69};
-   float   n{0};
-   float   drive{1.0};
-   float   gain{1.0};
+   float tuning{0.0};
+   float volume{0.0};
+   float hpf_freq{80.0};
+   float hpf_q{1.20};
 };
 
-} // namespace Simple
+} // namespace TB_303

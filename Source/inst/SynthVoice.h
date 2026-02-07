@@ -6,8 +6,9 @@
 #pragma once
 
 #include "Synth.h"
+#include "SIG/SIG.h"
 
-template <typename EFFECT, typename VOICE, unsigned NUM_VOICES>
+template <typename EFFECT, typename VOICE, unsigned NUM_VOICES, typename CLIP = SIG::Clip::No>
 class SynthVoice : public Synth
 {
 public:
@@ -38,6 +39,7 @@ protected:
 
    EFFECT effect{};
    VOICE  voice[NUM_VOICES];
+   CLIP   clip{};
 
 private:
    int16_t sample()
@@ -53,7 +55,7 @@ private:
 
       output = effect.post(output / NUM_VOICES);
 
-      return int16_t(output * 0x7FFF);
+      return int16_t(clip(output) * 0x7FFF);
    }
 
    void getSamples(uint32_t* buffer, unsigned n) override

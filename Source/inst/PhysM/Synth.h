@@ -7,13 +7,13 @@
 
 #include "SynthVoice.h"
 
-#include "Effect.h"
+#include "NoEffect.h"
 #include "Voice.h"
 #include "Patch.h"
 
 namespace PhysM {
 
-class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
+class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip::Poly>
 {
 public:
    Synth()

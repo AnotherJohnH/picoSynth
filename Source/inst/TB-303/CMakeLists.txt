@@ -1,8 +1,9 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2025 John D. Haughton
+# Copyright (c) 2026 John D. Haughton
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(Simple INTERFACE)
+add_library(TB303 STATIC 
+            Patch.cpp)
 
-target_include_directories(Simple INTERFACE ..)
+target_include_directories(TB303 PUBLIC ..)

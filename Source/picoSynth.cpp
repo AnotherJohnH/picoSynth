@@ -121,11 +121,11 @@ void initSynth()
 {
    switch(synth_index)
    {
-   case 0: synth = &juno106;      break;
-   case 1: synth = &vl1;          break;
-   case 2: synth = &physm;        break;
-   case 3: synth = &acorn_proton; break;
-   case 4: synth = &tb_303;       break;
+   case 0: synth = &tb_303;       break;
+   case 1: synth = &juno106;      break;
+   case 2: synth = &vl1;          break;
+   case 3: synth = &physm;        break;
+   case 4: synth = &acorn_proton; break;
    case 5: synth = &simple;       break;
    }
 

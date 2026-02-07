@@ -5,17 +5,26 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace TB_303 {
+
+enum Wave : uint8_t { RAMP = 0, SQUARE = 1 };
 
 struct Patch
 {
-   uint8_t vco_wave{0};
-   float   vco_tuning{0};
-   float   vcf_freq{0};
-   float   vcf_resonance{0};
-   float   env_mod{0};
-   float   env_decay{0};
-   float   accent{0};
+   Wave  vco_wave{RAMP};
+   float vcf_freq{0};
+   float vcf_resonance{0};
+   float env_mod{0};
+   float env_decay{0};
+   float accent{0};
+
+   const char* name{};
 };
+
+extern const unsigned NUM_PROGRAM;
+
+extern const Patch program[];
 
 } // namespace TB_303
