@@ -1,9 +1,10 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2026 John D. Haughton
+# Copyright (c) 2025 John D. Haughton
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(TB303 STATIC 
-            Patch.cpp)
+add_library(VL1 STATIC Patch.cpp)
 
-target_include_directories(TB303 PUBLIC ..)
+target_include_directories(VL1 PUBLIC ..)
+
+target_link_libraries(VL1 PUBLIC Synth)

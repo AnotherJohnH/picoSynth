@@ -13,30 +13,16 @@
 
 #include "SIG/SIG.h"
 
-#include "Juno106/Synth.h"
-#include "VL1/Synth.h"
-#include "PhysM/Synth.h"
-#include "Simple/Synth.h"
-#include "AcornProton/Synth.h"
-#include "TB-303/Synth.h"
+#include "inst/SynthRack.h"
 
-static const bool     MIDI_DEBUG       = false;
-static const bool     PROFILE          = false;
+// -----------------------------------------------------------------------------
 
-static const unsigned TICK_RATE        = 800;                           //!< 800 Hz
-static const unsigned SAMPLES_PER_TICK = SIG::SAMPLE_RATE / TICK_RATE;  //!< DAC buffer size (16 bit samples)
-static const unsigned NUM_SYNTHS       = 6;
+static const bool     MIDI_DEBUG = false;  //!< Enable MIDI debug on console
+static const bool     PROFILE    = false;  //!< Enable profiling on LCD
+static const unsigned TICK_RATE  = 800;    //!< 800 Hz
 
-static Juno106::Synth     juno106{};
-static VL1::Synth         vl1{};
-static PhysM::Synth       physm{};
-static Simple::Synth      simple{};
-static AcornProton::Synth acorn_proton{};
-static TB_303::Synth      tb_303{};
-
-static Synth*         synth{};
-static unsigned       synth_index{0};
-
+static SynthRack rack{};
+static Synth*    synth{};
 
 // -----------------------------------------------------------------------------
 
@@ -62,6 +48,8 @@ extern "C" void IRQ_USBCTRL() { usb.irq(); }
 
 
 // --- DAC ---------------------------------------------------------------------
+
+static const unsigned SAMPLES_PER_TICK = SIG::SAMPLE_RATE / TICK_RATE;  //!< DAC buffer size (16 bit samples)
 
 static hw::Audio<SAMPLES_PER_TICK> audio{SIG::SAMPLE_RATE};
 
@@ -119,15 +107,7 @@ void profileReport()
 
 void initSynth()
 {
-   switch(synth_index)
-   {
-   case 0: synth = &tb_303;       break;
-   case 1: synth = &juno106;      break;
-   case 2: synth = &vl1;          break;
-   case 3: synth = &physm;        break;
-   case 4: synth = &acorn_proton; break;
-   case 5: synth = &simple;       break;
-   }
+   synth = rack.get();
 
    usb.attachInstrument(1, *synth);
    phys_midi.attachInstrument(1, *synth);
@@ -136,8 +116,6 @@ void initSynth()
    //     program changes on MIDI channel 2 #!@*4%
    usb.attachInstrument(2, *synth);
    phys_midi.attachInstrument(2, *synth);
-
-   synth->init();
 }
 
 int main()
@@ -187,15 +165,11 @@ int main()
 
       bool     down{};
       unsigned index{};
-
-      if (buttons.popEvent(index, down))
+      if (buttons.popEvent(index, down) && down)
       {
-         if (down)
-         {
-            synth_index = (synth_index + 1) % NUM_SYNTHS;
+         rack.next();
 
-            initSynth();
-         }
+         initSynth();
       }
 
       usleep(100000);

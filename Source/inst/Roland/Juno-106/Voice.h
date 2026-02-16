@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "Juno106/SysEx.h"
-#include "Juno106/Effect.h"
+#include "SysEx.h"
+#include "Effect.h"
 
 #include "SIG/SIG.h"
 

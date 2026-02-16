@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_subdirectory(inst)
+add_library(Synth INTERFACE)
 
-add_picoX7_executable(picoSynth
-                         picoSynth.cpp
-                      LIBRARIES
-                         Inst)
+target_include_directories(Synth INTERFACE .)
+
+target_link_libraries(Synth INTERFACE SIG)

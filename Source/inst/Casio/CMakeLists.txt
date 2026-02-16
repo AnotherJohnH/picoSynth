@@ -3,6 +3,9 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(Simple INTERFACE)
+add_library(Casio INTERFACE)
 
-target_include_directories(Simple INTERFACE ..)
+add_subdirectory(VL1)
+
+target_link_libraries(Casio INTERFACE
+                      VL1)

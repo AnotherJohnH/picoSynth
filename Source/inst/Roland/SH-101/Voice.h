@@ -11,7 +11,7 @@
 #include "Patch.h"
 #include "Control.h"
 
-namespace TB_303 {
+namespace SH_101 {
 
 class Voice
 {
@@ -106,10 +106,10 @@ private:
    SIG::Osc::Ramp          vco_ramp{};
    SIG::Filter::BiQuad     hpf{SIG::Filter::HIPASS};
    SIG::Filter::BiQuad     vcf1{SIG::Filter::LOPASS};
-   SIG::Filter::FirstOrder vcf2{SIG::Filter::BYPASS};
+   SIG::Filter::FirstOrder vcf2{SIG::Filter::LOPASS};
    SIG::Env::Adsr          vcf_env{};
    SIG::Env::Adsr          vca_env{};
    SIG::Gain               volume{};
 };
 
-} // namespace TB_303
+} // namespace SH_101

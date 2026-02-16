@@ -3,6 +3,11 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(PhysM INTERFACE)
+add_library(Roland INTERFACE)
 
-target_include_directories(PhysM INTERFACE ..)
+add_subdirectory(TB-303)
+add_subdirectory(SH-101)
+add_subdirectory(Juno-106)
+
+target_link_libraries(Roland INTERFACE
+                      TB_303 SH_101 Juno_106)

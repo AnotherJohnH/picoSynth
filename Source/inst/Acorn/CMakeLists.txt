@@ -1,8 +1,11 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2025 John D. Haughton
+# Copyright (c) 2026 John D. Haughton
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(Simple INTERFACE)
+add_library(Acorn INTERFACE)
 
-target_include_directories(Simple INTERFACE ..)
+add_subdirectory(Proton)
+
+target_link_libraries(Acorn INTERFACE
+                      Proton)

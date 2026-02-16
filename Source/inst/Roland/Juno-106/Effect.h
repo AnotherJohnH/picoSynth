@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "Juno106/SysEx.h"
+#include "SysEx.h"
 
 #include "SIG/SIG.h"
 

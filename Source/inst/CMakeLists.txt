@@ -3,8 +3,14 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_subdirectory(VL1)
-add_subdirectory(Juno106)
-add_subdirectory(PhysM)
-add_subdirectory(Simple)
-add_subdirectory(TB-303)
+add_subdirectory(Synth)
+
+add_subdirectory(Acorn)
+add_subdirectory(Casio)
+add_subdirectory(Roland)
+add_subdirectory(Generic)
+
+add_library(Inst INTERFACE)
+
+target_link_libraries(Inst INTERFACE
+                      Acorn Casio Roland Generic)

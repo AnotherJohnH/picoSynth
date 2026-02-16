@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <cstdarg>
 
-#include "Juno106/SysEx.h"
+#include "SysEx.h"
 
 // Helper for pretty printing
 static void pretf(const char* fix, const char* format = "", ...)
