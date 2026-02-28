@@ -20,7 +20,9 @@ class Voice
 public:
    Voice()
    {
-      vcf.setFreq(5000);
+      noise.gain = 3.8f;
+      noise_filter.setFreq(1800.0f);
+      noise_filter.setQ(0.40f);
    }
 
    void program(const Patch* patch_)
@@ -36,36 +38,43 @@ public:
       vco_octave = patch_->vco_range;
       vco_rect.setWidth(patch_->vco_pulse_width * 0.092);
 
-      // SOURCE MIXER
+      // SOURCE
       vco_rect.gain = patch_->source_square * -0.03;
       vco_ramp.gain = patch_->source_ramp   * +0.04;
       vco_sub.gain  = patch_->source_sub    * -0.02;
-      noise.gain    = patch_->source_noise  * +0.07;
+      noise_mix     = patch_->source_noise  * +0.07;
 
       switch(patch_->source_sub_mode)
       {
-      case 0: vco_sub_octave = -2; break;
-      case 1: vco_sub_octave = -1; break;
-      case 2: vco_sub_octave = -2; break;
+      case SUB_2OS: vco_sub_octave = -2; break;
+      case SUB_1OS: vco_sub_octave = -1; break;
+      case SUB_2OP: vco_sub_octave = -2; break;
       }
 
       updateFreq();
 
       // VCF
       vcf.setFreq(16000.0f * powf(2.0f, 255.0f * (patch_->vcf_freq * 0.1f - 1.0f) / 21.0f));
-      vcf.setQ(0.5f + patch_->vcf_res);
+      vcf.setQ(0.4f + patch_->vcf_res * 1.5f);
 
       // ENV
-      vca_is_gate = patch_->vca_mode == 0;
+      env_mode = patch_->env_mode;
       env.setAttack_mS(unsigned(patch_->env_a* 400));
       env.setDecay_mS(unsigned(patch_->env_d* 1000));
       env.setSustain(patch_->env_s * 0.1f);
       env.setRelease_mS(unsigned(patch_->env_r * 1000));
+
+      // VCA
+      vca_mode = patch_->vca_mode;
    }
 
    void program(const Control* control_)
    {
       volume = SIG::dBGainLookup(control_->volume);
+
+      //noise_filter.setFreq(1000.0f + control_->tune1 * 2000.0f);
+      //noise_filter.setQ(0.1 + control_->tune2);
+      //noise.gain = control_->tune3 * 10.0f;
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
@@ -92,16 +101,16 @@ public:
 
    SIG::Signal sample(const NoEffect& effect_)
    {
-      SIG::Signal noise_out = noise();
+      SIG::Signal noise_out = noise_filter( noise());
       SIG::Signal env_out   = env();
       SIG::Signal lfo_out;
 
       switch(lfo_wave)
       {
-      case 0: lfo_out = lfo_triangle(); break;
-      case 1: lfo_out = lfo_square();   break;
-      case 2: lfo_out = lfo_random();   break;
-      case 3: lfo_out = noise_out;      break;
+      case LFO_TRI:   lfo_out = lfo_triangle(); break;
+      case LFO_SQR:   lfo_out = lfo_square();   break;
+      case LFO_RAND:  lfo_out = lfo_random();   break;
+      case LFO_NOISE: lfo_out = noise_out;      break;
       }
 
       (void) lfo_out;
@@ -109,9 +118,9 @@ public:
       SIG::Signal source_mix = vco_rect() +
                                vco_ramp() +
                                vco_sub() +
-                               noise_out;
+                               noise_mix(noise_out);
 
-      vca = vca_is_gate ? gate : env_out;
+      vca = vca_mode == VCA_ENV ? env_out : gate;
 
       return volume( vca( vcf( source_mix )));
    }
@@ -124,33 +133,40 @@ private:
       vco_sub.setNote(note + vco_sub_octave * 12);
    }
 
-   uint8_t note; // Currently playing MIDI note
- 
+   SIG::Osc::Noise      noise{};
+   SIG::Filter::BiQuad  noise_filter{SIG::Filter::LOPASS};
+
    // LFO
-   uint8_t            lfo_wave{};
+   LfoWave            lfo_wave{};
    SIG::Osc::Triangle lfo_triangle{};
    SIG::Osc::Square   lfo_square{};
    SIG::Osc::Random   lfo_random{};
-   SIG::Osc::Noise    lfo_noise{};
 
    // VCO
-   unsigned        vco_octave{0};
-   unsigned        vco_sub_octave{1};
+   uint8_t         note;              // Currently playing MIDI note
+   unsigned        vco_octave{};
+   unsigned        vco_sub_octave{};
    SIG::Osc::Pwm   vco_rect{};
    SIG::Osc::Ramp  vco_ramp{};
    SIG::Osc::Pwm   vco_sub{};
-   SIG::Osc::Noise noise{};
+
+   // SOURCE
+   SIG::Gain       noise_mix;
 
    // VCF
    SIG::Filter::BiQuad vcf{SIG::Filter::LOPASS};
 
-   // ENV + VCA
-   bool           vca_is_gate{false};
+   // ENV
+   EnvMode        env_mode{};
    SIG::Float     gate{};
    SIG::Env::Adsr env{};
-   SIG::Gain      vca{};
 
-   SIG::Gain         volume{};
+   // VCA
+   VcaMode   vca_mode{};
+   SIG::Gain vca{};
+
+   // AMP
+   SIG::Gain volume{};
 };
 
 } // namespace SH_101

@@ -102,14 +102,14 @@ private:
 
    SIG::Float accent{0.0};
 
-   SIG::Osc::Square        vco_square{};
-   SIG::Osc::Ramp          vco_ramp{};
-   SIG::Filter::BiQuad     hpf{SIG::Filter::HIPASS};
-   SIG::Filter::BiQuad     vcf1{SIG::Filter::LOPASS};
-   SIG::Filter::FirstOrder vcf2{SIG::Filter::LOPASS};
-   SIG::Env::Adsr          vcf_env{};
-   SIG::Env::Adsr          vca_env{};
-   SIG::Gain               volume{};
+   SIG::Osc::Square     vco_square{};
+   SIG::Osc::Ramp       vco_ramp{};
+   SIG::Filter::BiQuad  hpf{SIG::Filter::HIPASS};
+   SIG::Filter::BiQuad  vcf1{SIG::Filter::LOPASS};
+   SIG::Filter::OnePole vcf2{SIG::Filter::LOPASS};
+   SIG::Env::Adsr       vcf_env{};
+   SIG::Env::Adsr       vca_env{};
+   SIG::Gain            volume{};
 };
 
 } // namespace TB_303

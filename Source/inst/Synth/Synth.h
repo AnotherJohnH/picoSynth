@@ -155,7 +155,7 @@ protected:
    {
       Control& ctrl = control[num_control++];
 
-      ctrl.init<TYPE>(midi1_, midi2_, 0, n_ - 1, name_, "", enum_, patch_, width_, lsb_);
+      ctrl.init<TYPE>(midi1_, midi2_, TYPE(0), TYPE(n_ - 1), name_, "", enum_, patch_, width_, lsb_);
    }
 
    //! Add a MIDI note button control

@@ -58,10 +58,10 @@ private:
    static constexpr float LFO_FREQ_MIN   = 0.1;  //!< LFO FREQ   0 => 0.1 Hz
    static constexpr float LFO_FREQ_MAX   = 30.0; //!< LFO FREQ  10 => 30 Hz
 
-   SIG::Osc::Triangle      lfo{};
-   bool                    enable_lsf{false};
-   bool                    enable_hpf{false};
-   SIG::Filter::FirstOrder hpf{SIG::Filter::HIPASS};
+   SIG::Osc::Triangle   lfo{};
+   bool                 enable_lsf{false};
+   bool                 enable_hpf{false};
+   SIG::Filter::OnePole hpf{SIG::Filter::HIPASS};
 };
 
 } // namespace Juno106

@@ -198,7 +198,7 @@ private:
    SIG::Osc::Triangle            vibrato{};
    float                         melody_transpose{};
    SIG::Osc::Pulse               melody{};
-   SIG::Filter::FirstOrder       lpf{SIG::Filter::LOPASS};
+   SIG::Filter::OnePole          lpf{SIG::Filter::LOPASS};
    SIG::Env::Adsr                env{};
    bool                          tremolo_on{false};
    SIG::Osc::Triangle            tremolo{};

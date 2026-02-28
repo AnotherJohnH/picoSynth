@@ -56,13 +56,13 @@ public:
    }
 
 private:
-   SIG::Osc::Noise         noise{};
-   SIG::Osc::Pwm           exciter{};
-   SIG::Filter::FirstOrder exciter_filter{SIG::Filter::LOPASS};
-   SIG::DelayV<1000>       delay{};
-   SIG::Filter::FirstOrder delay_filter{SIG::Filter::LOPASS};
-   SIG::Gain               feedback{};
-   SIG::Gain               volume{};
+   SIG::Osc::Noise      noise{};
+   SIG::Osc::Pwm        exciter{};
+   SIG::Filter::OnePole exciter_filter{SIG::Filter::LOPASS};
+   SIG::DelayV<1000>    delay{};
+   SIG::Filter::OnePole delay_filter{SIG::Filter::LOPASS};
+   SIG::Gain            feedback{};
+   SIG::Gain            volume{};
 };
 
 } // namespace PhysM

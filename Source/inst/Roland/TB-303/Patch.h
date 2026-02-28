@@ -14,11 +14,11 @@ enum Wave : uint8_t { RAMP = 0, SQUARE = 1 };
 struct Patch
 {
    Wave  vco_wave{RAMP};
-   float vcf_freq{0};
-   float vcf_resonance{0};
-   float env_mod{0};
-   float env_decay{0};
-   float accent{0};
+   float vcf_freq{0.0f};
+   float vcf_resonance{0.0f};
+   float env_mod{0.0f};
+   float env_decay{0.0f};
+   float accent{0.0f};
 
    const char* name{};
 };

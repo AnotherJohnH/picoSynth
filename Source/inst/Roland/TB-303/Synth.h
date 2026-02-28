@@ -23,10 +23,10 @@ class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip
 public:
    Synth()
    {
-      //static const char* vco_wave_enum[] = {"WAVEFORM   RAMP", "WAVEFORM  SQUARE"};
+      static const ::Control::Enum enm_wave[2] =
+         {{RAMP, "RAMP"}, {SQUARE, "SQUARE"}};
 
-      //addTgl(1, vco_wave_enum, (uint8_t&)patch.vco_wave);
-      addCtrl<Wave>(MX::BTM1, NONE, RAMP, SQUARE, "WAVE", "", patch.vco_wave);
+      addCtrl<Wave>(MX::BTM1, NONE, 2, enm_wave, "WAVE", patch.vco_wave);
 
       // The TB-303 voice controls
       addCtrl<float>(MX::LVL1, MK::K1, 0.0f, +9.99f, "CUT OFF FRQ", "", patch.vcf_freq);

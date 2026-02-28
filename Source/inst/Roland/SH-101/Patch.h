@@ -9,35 +9,41 @@
 
 namespace SH_101 {
 
+enum LfoWave : uint8_t { LFO_TRI = 0, LFO_SQR = 1, LFO_RAND = 2, LFO_NOISE = 3 };
+enum VcoPwm  : uint8_t { PWM_MAN = 0, PWM_LFO = 1, PWM_ENV = 2 };
+enum SubMode : uint8_t { SUB_2OS = 0, SUB_1OS = 1, SUB_2OP = 2 };
+enum EnvMode : uint8_t { ENV_GPT = 0, ENV_LFO = 1, ENV_GTE = 2 };
+enum VcaMode : uint8_t { VCA_GTE = 0, VCA_ENV = 1 };
+
 struct Patch
 {
-   uint8_t lfo_wave{0};          // TRI SQR RND NSE
-   float   lfo_rate{0};
+   LfoWave lfo_wave{LFO_TRI};
+   float   lfo_rate{0.0f};
 
+   float   vco_mod{0.0f};
    int8_t  vco_range{0};         // 16' 8' 4' 2'
-   uint8_t vco_pwm_src{0};       // LFO MAN ENV
-   float   vco_mod{0};
-   float   vco_pulse_width{0};
+   float   vco_pulse_width{0.0f};
+   VcoPwm  vco_pwm_src{PWM_MAN};
 
-   uint8_t source_sub_mode{0};   // 1-OCT-SQ 2-OCT-SQ 2-OCT-PULSE
-   float   source_square{0};
-   float   source_ramp{1};
-   float   source_sub{0};
-   float   source_noise{0};
+   float   source_square{9.9f};
+   float   source_ramp{9.9f};
+   float   source_sub{0.0f};
+   SubMode source_sub_mode{SUB_1OS};
+   float   source_noise{0.0f};
 
-   float   vcf_freq{0};
-   float   vcf_res{0};
-   float   vcf_env{0};
-   float   vcf_mod{0};
-   float   vcf_kybd{0};
+   float   vcf_freq{9.9f};
+   float   vcf_res{0.0f};
+   float   vcf_env{0.0f};
+   float   vcf_mod{0.0f};
+   float   vcf_kybd{0.0f};
 
-   uint8_t vca_mode{0};        // ENV GATE
+   EnvMode env_mode{ENV_GTE};
+   float   env_a{0.0f};
+   float   env_d{0.0f};
+   float   env_s{9.9f};
+   float   env_r{0.0f};
 
-   uint8_t env_mode{0};        // GATE+TRIG GATE LFO
-   float   env_a{0};
-   float   env_d{0};
-   float   env_s{0};
-   float   env_r{0};
+   VcaMode vca_mode{VCA_GTE};
 
    const char* name{};
 };
