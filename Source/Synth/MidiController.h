@@ -61,6 +61,8 @@ extern const uint8_t map[38];
 
 namespace MPKmini {
 
+inline constexpr unsigned BEND_VERT = 1;
+
 inline constexpr unsigned K1 = 2;
 inline constexpr unsigned K2 = 3;
 inline constexpr unsigned K3 = 4;

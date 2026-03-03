@@ -45,7 +45,7 @@ public:
 
       // SOURCE MIXER
       static const ::Control::Enum enm_sub_mode[3] =
-         {{0, "2OS"}, {1, "1OS"}, {2, "2OP"}};
+         {{SUB_2OS, "2OS"}, {SUB_1OS, "1OS"}, {SUB_2OP, "2OP"}};
 
       addCtrl<float>(  MX::LVL4, MK::K1, 0.0f, +9.99f,  "SRC SQUARE ",    "", patch.source_square);
       addCtrl<float>(  MX::LVL5, MK::K2, 0.0f, +9.99f,  "SRC RAMP   ",    "", patch.source_ramp);
@@ -62,7 +62,7 @@ public:
 
       // ENV
       static const ::Control::Enum enm_env_mode[3] =
-         {{0, "G+T"}, {1, "LFO"}, {2, "GATE"}};
+         {{ENV_GPT, "G+T"}, {ENV_LFO, "LFO"}, {ENV_GTE, "GATE"}};
 
       addCtrl<EnvMode>(MX::BTM4, NONE, 3, enm_env_mode, "ENV MODE   ",     patch.env_mode);
       addCtrl<float>(  MX::BTM5, NONE,   0.0f, +9.99f,  "ENV ATTACK ", "", patch.env_a);
@@ -72,17 +72,22 @@ public:
 
       // VCA
       static const ::Control::Enum enm_vca_mode[2] =
-         {{0, "GATE"}, {1, "ENV"}};
+         {{VCA_GTE, "GATE"}, {VCA_ENV, "ENV"}};
 
       addCtrl<VcaMode>(MX::BTM3, NONE, 2, enm_vca_mode, "VCA MODE   ", patch.vca_mode);
 
       // CONTROL
-      addCtrl<float>(  MX::BTM2, NONE,      -5.0f,  +5.0f, "TUNE       ",  "", control.tune);
-      addCtrl<float>(  MX::MASTER, MK::K8, -60.0f, +20.0f, "VOLUME", "dB",   control.volume);
-      addCtrl<float>(  MX::TOP5, NONE,       0.0f, +9.99f, "PORTMENTO  ",  "", control.portamento);
-      addCtrl<float>(  MX::TOP6, NONE,       0.0f, +9.99f, "BEND VCO   ",  "", control.bend_vco);
-      addCtrl<float>(  MX::TOP7, NONE,       0.0f, +9.99f, "BEND VCF   ",  "", control.bend_vcf);
-      addCtrl<float>(  MX::TOP8, NONE,       0.0f, +9.99f, "LFO MOD    ",   "", control.lfo_mod);
+      static const ::Control::Enum enm_porta_mode[3] =
+         {{PORTA_OFF, "OFF"}, {PORTA_AUTO, "AUTO"}, {PORTA_ON, "ON"}};
+
+      addCtrl<float>(    NONE,       MK::BEND_VERT, -1.0f,  +1.0f, "MODULATE   ",  "", control.modulation);
+      addCtrl<float>(    MX::BTM2,   NONE,          -5.0f,  +5.0f, "TUNE       ",  "", control.tune);
+      addCtrl<float>(    MX::MASTER, MK::K8,       -60.0f, +20.0f, "VOLUME",     "dB", control.volume);
+      addCtrl<float>(    MX::TOP4,   NONE,           0.0f, +9.99f, "BEND VCO   ",  "", control.bend_vco);
+      addCtrl<float>(    MX::TOP5,   NONE,           0.0f, +9.99f, "BEND VCF   ",  "", control.bend_vcf);
+      addCtrl<float>(    MX::TOP6,   NONE,           0.0f, +9.99f, "LFO MOD    ",  "", control.lfo_mod);
+      addCtrl<PortaMode>(MX::TOP7,   NONE, 3, enm_porta_mode ,     "PORTA MODE ",      control.porta_mode);
+      addCtrl<float>(    MX::TOP8,   NONE,           0.0f, +9.99f, "PORTMENTO  ",  "", control.portamento);
 
       // Model tuning and debug
       addCtrl<float>(MX::MID1, NONE, 0.0f, +1.0f,  "int 1      ", "", control.tune1);
@@ -107,6 +112,11 @@ private:
       setText(1, patch.name);
 
       programVoices(&patch);
+   }
+
+   void voicePitchBend(unsigned index_, int16_t value_) override
+   {
+      control.bend = value_;
    }
 
    Patch   patch{};

@@ -54,6 +54,8 @@ public:
       }
 
       // VCF
+      vcf_man = 16000.0f * powf(2.0f, 255.0f * (patch_->vcf_freq * 0.1f - 1.0f) / 21.0f);
+
       vcf.setFreq(16000.0f * powf(2.0f, 255.0f * (patch_->vcf_freq * 0.1f - 1.0f) / 21.0f));
       vcf.setQ(0.4f + patch_->vcf_res * 1.5f);
       vcf_env_mod = patch_->vcf_env  * 0.1f;
@@ -74,11 +76,20 @@ public:
    void program(const Control* control_)
    {
       volume = SIG::dBGainLookup(control_->volume);
+
+      portamento.setTimeConst(control_->portamento * 0.1f);
+
+      switch(control_->porta_mode)
+      {
+      case PORTA_OFF:  portamento.setTimeConst(0.0f); break;
+      case PORTA_AUTO: portamento.setTimeConst(control_->portamento * 0.1f); break;
+      case PORTA_ON:   portamento.setTimeConst(control_->portamento * 0.1f); break;
+      }
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
    {
-      cv = (note_ / 12.0f) + vco_octave;
+      portamento = note_ / 12.0f;
 
       lfo_triangle.sync();
       lfo_square.sync();
@@ -125,7 +136,9 @@ public:
       }
       vco_rect.setWidth(pwm_out * 0.91);
 
-      SIG::Signal vco_cv = cv + vco_mod * lfo_out;
+      SIG::Float cv = portamento();
+
+      SIG::Signal vco_cv = cv + vco_mod * lfo_out + vco_octave;
 
       vco_rect.setCV(vco_cv);
       vco_ramp.setCV(vco_cv);
@@ -136,11 +149,12 @@ public:
                                vco_sub() +
                                noise_mix(noise_out);
 
-      SIG::Signal vcf_mod = vcf_lfo_mod * lfo_out +
-                            vcf_env_mod * env_out +
-                            vcf_kbd_mod * cv;
+      SIG::Signal vcf_cv = vcf_man +
+                           vcf_lfo_mod * lfo_out +
+                           vcf_env_mod * env_out +
+                           vcf_kbd_mod * cv;
 
-      (void) vcf_mod;
+      (void) vcf_cv;
 
       vca = vca_mode == VCA_ENV ? env_out : gate;
 
@@ -150,8 +164,8 @@ public:
 private:
    const SIG::LogPot log_pot{/* max x */ 9.99f, /* break point y */ 0.2f};
 
-   SIG::Float gate{};
-   SIG::Float cv{};
+   SIG::Float   gate{};
+   SIG::ExpSlew portamento{0.0f};
 
    // Noise generator
    SIG::Osc::Noise     noise{};
@@ -177,6 +191,7 @@ private:
    SIG::Gain       noise_mix;
 
    // VCF
+   SIG::Signal         vcf_man;
    SIG::Signal         vcf_lfo_mod;
    SIG::Signal         vcf_env_mod;
    SIG::Signal         vcf_kbd_mod;

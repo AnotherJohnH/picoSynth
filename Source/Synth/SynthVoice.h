@@ -75,6 +75,10 @@ private:
       }
    }
 
+   void voicePitchBend(unsigned index_, int16_t value_) override
+   {
+   }
+
    void voiceOn(unsigned index_, uint8_t midi_note_, uint8_t velocity_) override
    {
       if (not synthFilterNote(midi_note_))
