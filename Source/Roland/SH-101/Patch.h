@@ -17,8 +17,8 @@ enum VcaMode : uint8_t { VCA_GTE = 0, VCA_ENV = 1 };
 
 struct Patch
 {
-   LfoWave lfo_wave{LFO_TRI};
    float   lfo_rate{0.0f};
+   LfoWave lfo_wave{LFO_TRI};
 
    float   vco_mod{0.0f};
    int8_t  vco_range{0};         // 16' 8' 4' 2'
@@ -37,13 +37,13 @@ struct Patch
    float   vcf_mod{0.0f};
    float   vcf_kybd{0.0f};
 
+   VcaMode vca_mode{VCA_GTE};
+
    EnvMode env_mode{ENV_GTE};
    float   env_a{0.0f};
    float   env_d{0.0f};
    float   env_s{9.9f};
    float   env_r{0.0f};
-
-   VcaMode vca_mode{VCA_GTE};
 
    const char* name{};
 };

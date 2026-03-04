@@ -28,38 +28,39 @@ public:
    void program(const Patch* patch_)
    {
       // LFO
-      lfo_wave = patch_->lfo_wave;
       float lfo_freq = 30.0f * powf(2.0f, 7.813f * (patch_->lfo_rate * 0.1f - 1.0f));
       lfo_triangle.setFreq(lfo_freq);
       lfo_square.setFreq(lfo_freq);
       lfo_random.setFreq(lfo_freq);
+      lfo_wave = patch_->lfo_wave;
 
       // VCO
-      vco_octave  = patch_->vco_range;
-      vco_pwm_src = patch_->vco_pwm_src;
       vco_mod     = patch_->vco_mod * 0.1f;
+      vco_octave  = patch_->vco_range;
       pwm_level   = patch_->vco_pulse_width * 0.1f;
+      vco_pwm_src = patch_->vco_pwm_src;
 
       // SOURCE
       vco_rect.gain = log_pot(patch_->source_square) * -0.3f;
       vco_ramp.gain = log_pot(patch_->source_ramp)   * +0.4f;
       vco_sub.gain  = log_pot(patch_->source_sub)    * -0.2f;
-      noise_mix     = log_pot(patch_->source_noise)  * +0.7f;
-
       switch(patch_->source_sub_mode)
       {
       case SUB_2OS: vco_sub_octave = -2; vco_sub.setWidth(0.0f); break;
       case SUB_1OS: vco_sub_octave = -1; vco_sub.setWidth(0.0f); break;
       case SUB_2OP: vco_sub_octave = -2; vco_sub.setWidth(-0.5f); break;
       }
+      noise_mix     = log_pot(patch_->source_noise)  * +0.7f;
 
       // VCF
       vcf_man = 1.0f + patch_->vcf_freq;
-
       vcf.setQ(0.4f + patch_->vcf_res * 1.5f);
       vcf_env_mod = patch_->vcf_env;
       vcf_lfo_mod = patch_->vcf_mod;
       vcf_kbd_mod = patch_->vcf_kybd * 0.1f;
+
+      // VCA
+      vca_mode = patch_->vca_mode;
 
       // ENV
       env_mode = patch_->env_mode;
@@ -67,9 +68,6 @@ public:
       env.setDecay_mS(unsigned(patch_->env_d * 1000));
       env.setSustain(patch_->env_s * 0.1f);
       env.setRelease_mS(unsigned(patch_->env_r * 1000));
-
-      // VCA
-      vca_mode = patch_->vca_mode;
    }
 
    void program(const Control* control_)
@@ -171,6 +169,7 @@ public:
    }
 
 private:
+   const SIG::Gain   lin_pot{0.1f};
    const SIG::LogPot log_pot{/* max x */ 9.99f, /* break point y */ 0.2f};
 
    SIG::Float   gate{};
@@ -206,13 +205,13 @@ private:
    SIG::Signal         vcf_kbd_mod;
    SIG::Filter::BiQuad vcf{SIG::Filter::LOPASS};
 
-   // ENV
-   EnvMode        env_mode{};
-   SIG::Env::Adsr env{};
-
    // VCA
    VcaMode   vca_mode{};
    SIG::Gain vca{};
+
+   // ENV
+   EnvMode        env_mode{};
+   SIG::Env::Adsr env{};
 
    // AMP
    SIG::Gain volume{};
