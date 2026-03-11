@@ -3,5 +3,5 @@
 ## Manufacturers
 
 * Casio
-* [Roland](Source/Roland)
+* [Roland](Source/Roland/index.md)
 * Yamaha
