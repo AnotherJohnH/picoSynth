@@ -3,5 +3,5 @@
 ## Manufacturers
 
 * Casio
-* [Roland](picoSynth/Roland)
+* [Roland](Source/Roland)
 * Yamaha
